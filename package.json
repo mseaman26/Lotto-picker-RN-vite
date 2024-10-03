@@ -1,0 +1,18 @@
+{
+  "name": "next-and-react-native-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cd viteApp && npm run dev",
+    "expo": "cd viteApp/expoapp && npx expo start",
+    "install": "cd viteApp && npm install && cd expoapp && npm install"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+  },
+
+  "oldInstallScript": "cd viteApp && npm install && cd ../expoapp && npm install"
+}
