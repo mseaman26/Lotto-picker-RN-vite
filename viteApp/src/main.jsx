@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage.jsx'
 import ErrorPage from './pages/ErrorPage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx';
 import MainLayout from './layouts/MainLayout.jsx';
+import LottoGamePage from './pages/LottoGamePage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: 'profile',
         element: <ProfilePage />,
+      },
+      {
+        path: 'lottoGame/:lottoGame',
+        element: <LottoGamePage />,
       }
     ],
   },
