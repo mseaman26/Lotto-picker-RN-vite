@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, Button, StyleSheet, Platform } from 'react-native-web';
 import UniversalLink from '../components/UniversalLink/UniversalLink';
+import { globalStyles } from '../styles/globalStyles';
 
 const ProfilePage = () => {
 
@@ -29,8 +30,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f9f9f9',
-    height: '100%'
+    backgroundColor: globalStyles.mainBG.backgroundColor,
+    height: '100%',
   },
   profileImage: {
     width: 150,

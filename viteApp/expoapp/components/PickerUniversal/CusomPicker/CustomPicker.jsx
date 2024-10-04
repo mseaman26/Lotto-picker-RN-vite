@@ -59,6 +59,8 @@ const styles = StyleSheet.create({
     container: {
         marginVertical: 10,
         width: '100%',
+        maxWidth: 800,
+        overflow: 'scroll',
     },
     label: {
         fontSize: 16,
@@ -88,6 +90,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 10,
         padding: 20,
+        maxHeight: 420,
     },
     item: {
         padding: 15,
