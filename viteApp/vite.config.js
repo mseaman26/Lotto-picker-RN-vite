@@ -11,6 +11,7 @@ export default defineConfig({
         },
     },
     build: {
+        sourcemap: true,
         rollupOptions: {
             // Ensure Vite handles all dependencies and shared modules
             external: [], // Empty this unless you're explicitly externalizing packages
