@@ -17,4 +17,12 @@ export default defineConfig({
             external: [], // Empty this unless you're explicitly externalizing packages
         },
     },
+    server: {
+        proxy: {
+            '/api': {
+                target: 'http://localhost:3000', // your backend API address
+                changeOrigin: true,              // changes the origin of the host header to the target URL
+            },
+        },
+    },
 });
