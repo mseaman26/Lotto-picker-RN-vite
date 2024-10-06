@@ -6,6 +6,7 @@ import HomePage from './pages/HomePageVite.jsx'
 import ErrorPage from './pages/ErrorPage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx';
 import LoginPage from './pages/LoginPageVite.jsx';
+import SignupPage from './pages/SignupPageVite.jsx';
 import MainLayout from './layouts/MainLayout.jsx';
 import ProtectedRoute from './viteComponents/ProtectedRoute.jsx';
 import AuthProvider from '../expoapp/context/AuthContext.jsx';
@@ -15,25 +16,41 @@ import LottoGamePage from './pages/LottoGamePageVite.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <LoggedOutLayout />,
-    errorElement: <ErrorPage />,
+    element: <MainLayout />, // Main layout for the application
+    errorElement: <ErrorPage />, // Error boundary for the main layout
     children: [
       {
-        index: true,
-        element: <HomePage />,
+        index: true, // Default route for '/'
+        element: <ProtectedRoute><HomePage /></ProtectedRoute>, // HomePage will be shown when at '/'
       },
       {
-        path: 'login',
-        element: <LoginPage />,
+        path: 'lottoGame/:lottoGame', // Nested route under the main layout
+        element: <ProtectedRoute><LottoGamePage /></ProtectedRoute>,
       },
       {
         path: 'profile',
-        element: <ProfilePage />,
+        element: <ProtectedRoute><ProfilePage /></ProtectedRoute>,
       },
+    ],
+  },
+  {
+    path: '/login', // Dedicated route for the login page
+    element: <LoggedOutLayout />, // Layout specifically for logged-out users
+    children: [
       {
-        path: 'lottoGame/:lottoGame',
-        element: <LottoGamePage />,
-      }
+        index: true, // This will render the login page when navigating to '/login'
+        element: <LoginPage />,
+      },
+    ],
+  },
+  {
+    path: '/signup', // Dedicated route for the login page
+    element: <LoggedOutLayout />, // Layout specifically for logged-out users
+    children: [
+      {
+        index: true, // This will render the login page when navigating to '/login'
+        element: <SignupPage />,
+      },
     ],
   },
 ]);

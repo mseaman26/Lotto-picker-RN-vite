@@ -23,12 +23,15 @@ export async function GET(request) {
         const { username, email, password } = body;
     
         try {
+            const existingUser = await User.findOne({ email });
+            if (existingUser) {
+                return new Response(JSON.stringify({ success: false, errorMessage: "User with this email already exists" }), { status: 400 });
+            }
             const user = await User.create({ username, email, password });
-            console.log('user with pw?', user);
             const token = Auth.signToken(user);
             return new Response(JSON.stringify({ success: true, data: token }), { status: 201 });
         } catch (error) {
             console.log("Error creating user: ", error);
-            return new Response(JSON.stringify({ success: false, error: error.message }), { status: 400 });
+            return new Response(JSON.stringify({ success: false, errorMessage: 'Server error. Please try again later' }), { status: 400 });
         }
   }

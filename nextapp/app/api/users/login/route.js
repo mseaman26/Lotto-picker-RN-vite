@@ -12,20 +12,21 @@ export async function POST(request) {
 
   // Validate input
   if (!email || !password) {
-    return new Response(JSON.stringify({ success: false, message: "Email and password are required" }), { status: 400 });
+    console.log('Email and password are required');
+    return new Response(JSON.stringify({ success: false, errorMessage: "Email and password are required" }), { status: 400 });
   }
 
   try {
     // Find the user by email
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
-      return new Response(JSON.stringify({ success: false, message: "Invalid email or password" }), { status: 401 });
+      return new Response(JSON.stringify({ success: false, errorMessage: "Invalid email or password" }), { status: 401 });
     }
 
     // Check if the provided password is valid
     const isPasswordValid = await user.isPasswordValid(password);
     if (!isPasswordValid) {
-      return new Response(JSON.stringify({ success: false, message: "Invalid email or password" }), { status: 401 });
+      return new Response(JSON.stringify({ success: false, errorMessage: "Invalid email or password" }), { status: 401 });
     }
 
     // If successful, sign a token and return user data (excluding password)
@@ -34,6 +35,6 @@ export async function POST(request) {
     return new Response(JSON.stringify({ success: true, data: { user: userData, token } }), { status: 200 });
   } catch (error) {
     console.error("Error during login: ", error);
-    return new Response(JSON.stringify({ success: false, message: "Internal server error" }), { status: 500 });
+    return new Response(JSON.stringify({ success: false, errorMessage: "Internal server error" }), { status: 500 });
   }
 }

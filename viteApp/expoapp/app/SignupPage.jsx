@@ -1,17 +1,24 @@
-import { View, Text, TextInput, Button, } from 'react-native-web';
+import { View, Text, TextInput, Button } from 'react-native-web';
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import NavigateUniversal from '../components/NavigaveUniversal/NavigateUniversal';
 import UniversalLink from '../components/UniversalLink/UniversalLink';
 
-const LoginPage = () => {
-    const { user, login, error, setError } = useContext(AuthContext);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+const SignupPage = () => {
+    const { user, signup, error, setError } = useContext(AuthContext);
+    const [email, setEmail] = useState('c@a.com');
+    const [username, setUsername] = useState('c');
+    const [password, setPassword] = useState('!Q2w3e4r');
+    const [redirect, setRedirect] = useState(false);
 
-    const handleEmailChang = (email) => {
+    const handleEmailChange = (email) => {
         setError(' ');
         setEmail(email);
+    }
+
+    const handleUsernameChange = (username) => {
+        setError(' ');
+        setUsername(username);
     }
 
     const handlePasswordChange = (password) => {
@@ -19,25 +26,26 @@ const LoginPage = () => {
         setPassword(password);
     }
 
-    const handleLogin = async () => {
-        // Reset error message
-        setError('');
-
-        try {
-            await login(email, password); // Assuming login returns a promise
-            console.log('Login button pressed');
-        } catch (error) {
-            // Set the error message if login fails
-            setError(error.message || 'Login failed. Please try again.');
-        }
+    const handleSignUp = () => {
+        // Add logic for handling the login, like form validation or an API call
+        signup(email, username, password);
+        console.log('Login button pressed');
     };
+
+    useEffect(() => {
+        if (user) {
+            setRedirect(true);
+        }
+    }, [user]);
+
+    
 
     useEffect(() => {
         setError(' '); // Reset error message when the component mounts
     }, []);
 
-    if (user) {
-        return <NavigateUniversal to="/" />;
+    if (redirect && user) {
+        return <NavigateUniversal to="/"/>;
     }
 
     return (
@@ -47,8 +55,15 @@ const LoginPage = () => {
             <TextInput
                 placeholder="Email"
                 style={styles.input}
-                onChangeText={handleEmailChang}
-                value={email} // Controlled component
+                onChangeText={handleEmailChange}
+                value={email}
+            />
+
+            <TextInput
+                placeholder="Username (display name)"
+                style={styles.input}
+                onChangeText={handleUsernameChange}
+                value={username}
             />
 
             <TextInput
@@ -56,14 +71,12 @@ const LoginPage = () => {
                 secureTextEntry={true}
                 style={styles.input}
                 onChangeText={handlePasswordChange}
-                value={password} // Controlled component
+                value={password}
             />
 
-            <Button title="Login" onPress={handleLogin} />
-
+            <Button title="Sign Up" onPress={handleSignUp} />
             <Text style={styles.error}>{error}</Text>
-
-            <Text>Don't have an account? <UniversalLink to="/signup">Sign up</UniversalLink></Text>
+            <Text>Already have an account? <UniversalLink to="/login">Login</UniversalLink></Text>
         </View>
     );
 };
@@ -95,4 +108,4 @@ const styles = {
     },
 };
 
-export default LoginPage;
+export default SignupPage;

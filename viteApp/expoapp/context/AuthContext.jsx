@@ -7,6 +7,7 @@ export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(' ');
 
   // Function to handle login
   const login = async (email, password) => {
@@ -20,6 +21,10 @@ const AuthProvider = ({ children }) => {
       });
 
       const data = await response.json();
+      console.log('login data:', data);
+      if(data.errorMessage) {
+        setError(data.errorMessage);
+      }
 
       if (response.ok && data.success) {
         console.log('data:', data);
@@ -33,6 +38,38 @@ const AuthProvider = ({ children }) => {
       console.error('Error during login:', error);
     }
   };
+
+  const signup = async (email, username, password) => {
+    console.log('signup function hit');
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, username, password }),
+      });
+
+      const data = await response.json();
+      if(data.errorMessage) {
+        setError(data.errorMessage);
+      }
+
+      if (response.ok && data.success) {
+        // If signup is successful, set user data
+        console.log('signup data:', data);
+        const token = data.data;
+        const decoded = jwtDecode(token);
+        setUser( decoded.data );
+        localStorage.setItem('authToken', data.data); // Store JWT in localStorage
+      } else {
+        console.error('Signup failed:', data.error || 'Unknown error');
+      }
+    } catch (error) {
+      console.error('Error during signup:', error);
+      setError('Error during signup. Please try again.');
+    }
+  }
 
   // Function to handle logout
   const logout = () => {
@@ -63,9 +100,12 @@ const AuthProvider = ({ children }) => {
     console.log('User:', user);
   }, [user]);
 
+  useEffect(() => {
+    console.log('Error:', error);
+  })
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
-      {console.log("AuthContext inside AuthProvider", { user, login, logout, loading })}
+    <AuthContext.Provider value={{ user, login, logout, loading, signup, error, setError }}>
       {children}
     </AuthContext.Provider>
   );
