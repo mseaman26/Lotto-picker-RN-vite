@@ -10,7 +10,7 @@ const isWeb = Platform.OS === 'web';
 
 const HomePage = () => {
 
-    const { user } = useContext(AuthContext);
+    const { user, loading } = useContext(AuthContext);
 
     const options = [{ label: 'Powerball', value: 'powerball' }, { label: 'Option 2', value: 'option 2' }, { label: 'Option 3', value: 'option 3' }, { label: 'Option 4', value: 'option 4' }, { label: 'Option 5', value: 'option 5' }, { label: 'Option 6', value: 'option 6' }, { label: 'Option 7', value: 'option 7' }, { label: 'Option 8', value: 'option 8' }, { label: 'Option 9', value: 'option 9' }, { label: 'Option 10', value: 'option 10' }];
 
@@ -20,10 +20,13 @@ const HomePage = () => {
         console.log('lottoGame', lottoGame);
     }, [lottoGame]);
 
+    if (loading) {
+        return <Text>Loading...</Text>;
+    }
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Welcome to the Home Page, {user.username}!</Text>
+            <Text style={styles.title}>Welcome to the Home Page, {user?.username}!</Text>
             <CustomPicker
                 label="Select your Lotto game"
                 selectedValue={lottoGame}

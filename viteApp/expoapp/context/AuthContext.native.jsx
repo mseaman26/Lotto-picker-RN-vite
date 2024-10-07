@@ -14,7 +14,7 @@ const AuthProvider = ({ children }) => {
     // Function to handle login
     const login = async (email, password) => {
         try {
-            const response = await fetch('https://https://lotto-server-next.vercel.app/api/users/login', {
+            const response = await fetch('https://lotto-server-next.vercel.app/api/users/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ const AuthProvider = ({ children }) => {
     const signup = async (email, username, password) => {
         console.log('signup function hit');
         try {
-            const response = await fetch('https://lotto-server-next-2oecnb63x-mseaman26s-projects.vercel.app/api/users', {
+            const response = await fetch('https://lotto-server-next.vercel.app/api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
