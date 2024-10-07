@@ -2,17 +2,20 @@ import { Slot } from 'expo-router';
 import Navbar from '../components/Navbar/Navbar';
 import { SafeAreaView, View, StyleSheet } from 'react-native-web';
 import { globalStyles } from '../styles/globalStyles';
+import AuthProvider from '../context/AuthContext';
 
 
 export default function HomeLayout() {
   return (
     <>
-    <View style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <Navbar />
-      </SafeAreaView>
-      <Slot style={styles.slot} />
-    </View>
+    <AuthProvider>
+      <View style={styles.container}>
+        <SafeAreaView style={styles.safeArea}>
+          <Navbar />
+        </SafeAreaView>
+        <Slot style={styles.slot} />
+      </View>
+    </AuthProvider>
     </>
   );
 }

@@ -1,13 +1,16 @@
-import { View, Text, TextInput, Button, } from 'react-native-web';
+import { View, Text, TextInput, Button,Platform } from 'react-native-web';
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import NavigateUniversal from '../components/NavigaveUniversal/NavigateUniversal';
 import UniversalLink from '../components/UniversalLink/UniversalLink';
 
 const LoginPage = () => {
+
+    const isWeb = Platform.OS === 'web';
+
     const { user, login, error, setError } = useContext(AuthContext);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('c@a.com');
+    const [password, setPassword] = useState('!Q2w3e4r');
 
     const handleEmailChang = (email) => {
         setError(' ');
@@ -32,6 +35,12 @@ const LoginPage = () => {
         }
     };
 
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            handleLogin();
+        }
+    };
+
     useEffect(() => {
         setError(' '); // Reset error message when the component mounts
     }, []);
@@ -49,6 +58,7 @@ const LoginPage = () => {
                 style={styles.input}
                 onChangeText={handleEmailChang}
                 value={email} // Controlled component
+                onKeyPress={handleKeyPress} // Add this to detect Enter key
             />
 
             <TextInput
@@ -57,13 +67,14 @@ const LoginPage = () => {
                 style={styles.input}
                 onChangeText={handlePasswordChange}
                 value={password} // Controlled component
+                onKeyPress={handleKeyPress} // Add this to detect Enter key
             />
 
             <Button title="Login" onPress={handleLogin} />
 
             <Text style={styles.error}>{error}</Text>
 
-            <Text>Don't have an account? <UniversalLink to="/signup">Sign up</UniversalLink></Text>
+            <Text>Don't have an account? <UniversalLink href={isWeb ? '/signup' : 'SignupPage'}>Sign up</UniversalLink></Text>
         </View>
     );
 };

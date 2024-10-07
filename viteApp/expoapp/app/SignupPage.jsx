@@ -1,10 +1,13 @@
-import { View, Text, TextInput, Button } from 'react-native-web';
+import { View, Text, TextInput, Button, Platform } from 'react-native-web';
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import NavigateUniversal from '../components/NavigaveUniversal/NavigateUniversal';
 import UniversalLink from '../components/UniversalLink/UniversalLink';
 
 const SignupPage = () => {
+
+    const isWeb = Platform.OS === 'web';
+
     const { user, signup, error, setError } = useContext(AuthContext);
     const [email, setEmail] = useState('c@a.com');
     const [username, setUsername] = useState('c');
@@ -76,7 +79,7 @@ const SignupPage = () => {
 
             <Button title="Sign Up" onPress={handleSignUp} />
             <Text style={styles.error}>{error}</Text>
-            <Text>Already have an account? <UniversalLink to="/login">Login</UniversalLink></Text>
+            <Text>Already have an account? <UniversalLink href={isWeb ? '/login' : 'LoginPage'}>Login</UniversalLink></Text>
         </View>
     );
 };

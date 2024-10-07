@@ -1,5 +1,5 @@
 // Navbar.js
-import React from 'react';
+import React, {useContext} from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native-web';
 import { globalStyles } from '../../styles/globalStyles';
 import UniversalLink from '../UniversalLink/UniversalLink';
@@ -9,13 +9,17 @@ const isWeb = Platform.OS === 'web';
 
 const Navbar = () => {
 
-    const { user, logout } = React.useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
 
     const handleLogout = () => {
         logout();
     }
 
     console.log('globalStyles', globalStyles.mainBG.backgroundColor);
+
+    if(!user) {
+        return null;
+    }
     return (
         <View style={styles.navbar}>
             <UniversalLink href={'/'}>
