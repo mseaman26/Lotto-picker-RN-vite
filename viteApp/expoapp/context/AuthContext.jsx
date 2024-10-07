@@ -17,6 +17,8 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+
+
   // Function to handle login
   const login = async (email, password) => {
     try {
