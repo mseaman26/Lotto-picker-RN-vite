@@ -22,26 +22,26 @@ const HomePage = () => {
 
 
     return (
-        // <View style={styles.container}>
-        //     <Text style={styles.title}>Welcome to the Home Page, {user.username}!</Text>
-        //     <CustomPicker
-        //         label="Select your Lotto game"
-        //         selectedValue={lottoGame}
-        //         onValueChange={setLottoGame}
-        //         options={options}
-        //         style={{ borderColor: 'gray', borderWidth: 1 }} // Custom styles can be added
-        //     />
-        //     {lottoGame && <UniversalLink href={isWeb ? `/lottoGame/${lottoGame}` : {
-        //         pathname: '/lottoGame/[lottoGame]',
-        //         params: { lottoGame: lottoGame }
-        //     }}>
-        //         <View style={styles.button}>
-        //             <Text style={styles.buttonText}>Pick Some Numbers!</Text>
-        //         </View>
-        //     </UniversalLink>}
+        <View style={styles.container}>
+            <Text style={styles.title}>Welcome to the Home Page, {user.username}!</Text>
+            <CustomPicker
+                label="Select your Lotto game"
+                selectedValue={lottoGame}
+                onValueChange={setLottoGame}
+                options={options}
+                style={{ borderColor: 'gray', borderWidth: 1 }} // Custom styles can be added
+            />
+            {lottoGame && <UniversalLink href={isWeb ? `/lottoGame/${lottoGame}` : {
+                pathname: '/lottoGame/[lottoGame]',
+                params: { lottoGame: lottoGame }
+            }}>
+                <View style={styles.button}>
+                    <Text style={styles.buttonText}>Pick Some Numbers!</Text>
+                </View>
+            </UniversalLink>}
 
-        // </View>
-        <Text>hello</Text>
+        </View>
+
     );
 };
 

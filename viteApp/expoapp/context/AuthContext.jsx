@@ -9,10 +9,18 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(' ');
 
+  const getApiUrl = () => {
+    if (process.env.NODE_ENV === 'development') {
+      return '';  // Local API in development
+    } else {
+      return 'https://lotto-server-next-2oecnb63x-mseaman26s-projects.vercel.app'; // Replace with your production API URL
+    }
+  };
+
   // Function to handle login
   const login = async (email, password) => {
     try {
-      const response = await fetch('/api/users/login', {
+      const response = await fetch(`${getApiUrl()}/api/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,7 +50,7 @@ const AuthProvider = ({ children }) => {
   const signup = async (email, username, password) => {
     console.log('signup function hit');
     try {
-      const response = await fetch('/api/users', {
+      const response = await fetch(`${getApiUrl()}/api/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
