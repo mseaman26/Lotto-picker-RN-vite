@@ -1,9 +1,13 @@
 import React, { createContext, useState, useEffect } from 'react';
-import jwtDecode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Create AuthContext
 export const AuthContext = createContext();
+
+// AsyncStorage.clear();
+
+
 
 const AuthProvider = ({ children }) => {
     console.log('in auth provider');
@@ -64,6 +68,7 @@ const AuthProvider = ({ children }) => {
                 // If signup is successful, set user data
                 console.log('signup data:', data);
                 const token = data.data;
+                console.log('token:', token);
                 const decoded = jwtDecode(token);
                 setUser(decoded.data);
 
@@ -87,17 +92,29 @@ const AuthProvider = ({ children }) => {
     // Function to check authentication status on app load
     useEffect(() => {
         const checkAuthStatus = async () => {
-            const token = await AsyncStorage.getItem('authToken');
 
+            AsyncStorage.getAllKeys().then((keys) => {
+                console.log(keys);
+                // Now you can retrieve values using keys
+                keys.forEach((key) => {
+                    AsyncStorage.getItem(key).then((value) => {
+                        console.log('key and val: ',key, value);
+                    });
+                });
+            });
+
+            const token = await AsyncStorage.getItem('authToken');
+            console.log('token from storage:', token);
             if (token) {
                 const decoded = jwtDecode(token);
+                console.log('decoded from storage:', decoded);
 
                 if (decoded.exp * 1000 < Date.now()) {
                     // If token is expired, log out
                     logout();
                 } else {
                     // If token is valid, set user data
-                    setUser(decoded);
+                    setUser(decoded.data);
                 }
             }
 

@@ -99,7 +99,7 @@ const AuthProvider = ({ children }) => {
         logout();
       } else {
         // If token is valid, set user data
-        setUser(decoded);
+        setUser(decoded.data);
       }
     }
 
