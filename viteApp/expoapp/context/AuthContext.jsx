@@ -13,7 +13,7 @@ const AuthProvider = ({ children }) => {
     if (process.env.NODE_ENV === 'development') {
       return '';  // Local API in development
     } else {
-      return 'https://lotto-server-next-2oecnb63x-mseaman26s-projects.vercel.app'; // Replace with your production API URL
+      return 'https://lotto-server-next.vercel.app'; // Replace with your production API URL
     }
   };
 
