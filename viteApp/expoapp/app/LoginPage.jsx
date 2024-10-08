@@ -8,7 +8,7 @@ const LoginPage = () => {
 
     const isWeb = Platform.OS === 'web';
 
-    const { user, login, error, setError } = useContext(AuthContext);
+    const { user, login, error, setError, loading } = useContext(AuthContext);
     const [email, setEmail] = useState('c@a.com');
     const [password, setPassword] = useState('!Q2w3e4r');
 
@@ -44,6 +44,14 @@ const LoginPage = () => {
     useEffect(() => {
         setError(' '); // Reset error message when the component mounts
     }, []);
+
+    useEffect(() => {
+        console.log('loading:', loading);
+    }, [loading]);
+
+    if(loading){
+        return <Text>Loading...</Text>
+    }
 
     if (user) {
         return <NavigateUniversal to="/" />;

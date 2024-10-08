@@ -21,6 +21,7 @@ const AuthProvider = ({ children }) => {
 
   // Function to handle login
   const login = async (email, password) => {
+    setLoading(true);
     try {
       const response = await fetch(`${getApiUrl()}/api/users/login`, {
         method: 'POST',
@@ -46,11 +47,13 @@ const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Error during login:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const signup = async (email, username, password) => {
-    console.log('signup function hit');
+    setLoading(true);
     try {
       const response = await fetch(`${getApiUrl()}/api/users`, {
         method: 'POST',
@@ -78,6 +81,8 @@ const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Error during signup:', error);
       setError('Error during signup. Please try again.');
+    } finally {
+      setLoading(false);
     }
   }
 
