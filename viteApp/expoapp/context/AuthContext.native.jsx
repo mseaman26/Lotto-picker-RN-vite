@@ -99,15 +99,15 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const checkAuthStatus = async () => {
 
-            AsyncStorage.getAllKeys().then((keys) => {
-                console.log(keys);
-                // Now you can retrieve values using keys
-                keys.forEach((key) => {
-                    AsyncStorage.getItem(key).then((value) => {
-                        console.log('key and val: ',key, value);
-                    });
-                });
-            });
+            // AsyncStorage.getAllKeys().then((keys) => {
+            //     console.log(keys);
+            //     // Now you can retrieve values using keys
+            //     keys.forEach((key) => {
+            //         AsyncStorage.getItem(key).then((value) => {
+            //             console.log('key and val: ',key, value);
+            //         });
+            //     });
+            // });
 
             const token = await AsyncStorage.getItem('authToken');
             console.log('token from storage:', token);
