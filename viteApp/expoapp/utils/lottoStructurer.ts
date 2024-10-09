@@ -25,6 +25,7 @@ export const lottoStructurer = (lotto: string) => {
                 {color: 'white', setIndex: 0},
                 {color: 'white', setIndex: 0},
                 {color: 'white', setIndex: 0},
+                {color: 'white', setIndex: 0},
                 {color: 'red', setIndex: 1}
             ],
             
@@ -37,6 +38,7 @@ export const lottoStructurer = (lotto: string) => {
                 [1, 25]
             ],
             numbers: [
+                {color: 'white', setIndex: 0},
                 {color: 'white', setIndex: 0},
                 {color: 'white', setIndex: 0},
                 {color: 'white', setIndex: 0},
