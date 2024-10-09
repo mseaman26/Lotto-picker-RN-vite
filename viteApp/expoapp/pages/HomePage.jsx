@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native
 import { useState, useEffect, useContext } from 'react';
 import CustomPicker from '../components/PickerUniversal/CusomPicker/CustomPicker';
 import UniversalLink from '../components/UniversalLink/UniversalLink';
+import NavigateUniversal from '../components/NavigaveUniversal/NavigateUniversal';
 import { AuthContext } from '../context/AuthContext';
 
 const isWeb = Platform.OS === 'web';
@@ -12,12 +13,19 @@ const HomePage = () => {
 
     const { user, loading } = useContext(AuthContext);
 
-    const options = [{ label: 'Powerball', value: 'powerball' }, { label: 'Option 2', value: 'option 2' }, { label: 'Option 3', value: 'option 3' }, { label: 'Option 4', value: 'option 4' }, { label: 'Option 5', value: 'option 5' }, { label: 'Option 6', value: 'option 6' }, { label: 'Option 7', value: 'option 7' }, { label: 'Option 8', value: 'option 8' }, { label: 'Option 9', value: 'option 9' }, { label: 'Option 10', value: 'option 10' }];
+    const options = [{ label: 'Powerball', value: 'powerball' }, { label: 'Mega Millions', value: 'megamillions' }, { label: 'Option 3', value: 'option 3' }, { label: 'Option 4', value: 'option 4' }, { label: 'Option 5', value: 'option 5' }, { label: 'Option 6', value: 'option 6' }, { label: 'Option 7', value: 'option 7' }, { label: 'Option 8', value: 'option 8' }, { label: 'Option 9', value: 'option 9' }, { label: 'Option 10', value: 'option 10' }];
 
     const [lottoGame, setLottoGame] = useState('');
+    const [redirecting, setRedirecting] = useState(false);
 
     useEffect(() => {
         console.log('lottoGame', lottoGame);
+    }, [lottoGame]);
+
+    useEffect(() => {
+        if (lottoGame) {
+            setRedirecting(true);
+        }
     }, [lottoGame]);
 
     if (loading) {
@@ -34,14 +42,23 @@ const HomePage = () => {
                 options={options}
                 style={{ borderColor: 'gray', borderWidth: 1 }} // Custom styles can be added
             />
-            {lottoGame && <UniversalLink href={isWeb ? `/lottoGame/${lottoGame}` : {
+            {/* {lottoGame && <UniversalLink href={isWeb ? `/lottoGame/${lottoGame}` : {
                 pathname: '/lottoGame/[lottoGame]',
                 params: { lottoGame: lottoGame }
             }}>
                 <View style={styles.button}>
                     <Text style={styles.buttonText}>Pick Some Numbers!</Text>
                 </View>
-            </UniversalLink>}
+            </UniversalLink>} */}
+
+            {redirecting && <NavigateUniversal to={isWeb ? `/lottoGame/${lottoGame}` : {
+                pathname: '/lottoGame/[lottoGame]',
+                params: { lottoGame: lottoGame }
+            }}>
+                <View style={styles.button}>
+                    <Text style={styles.buttonText}>Pick Some Numbers!</Text>
+                </View>
+            </NavigateUniversal>}
 
         </View>
 

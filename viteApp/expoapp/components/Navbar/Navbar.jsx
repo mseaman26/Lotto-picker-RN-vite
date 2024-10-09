@@ -41,6 +41,8 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor: globalStyles.mainBG.backgroundColor,
         paddingTop: isWeb ? 15 : 0,
+        borderBottomWidth: 1,
+        borderBottomColor: 'grey',
     },
     navItem: {
         color: 'black',
