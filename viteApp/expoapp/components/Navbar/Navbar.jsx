@@ -38,9 +38,11 @@ const styles = StyleSheet.create({
     navbar: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        height: 40,
+        height: 60,
+        alignItems: 'center',
         backgroundColor: globalStyles.mainBG.backgroundColor,
-        paddingTop: isWeb ? 15 : 0,
+        paddingTop: 0,
+        paddingBottom: isWeb ? 0 : 10,
         borderBottomWidth: 1,
         borderBottomColor: 'grey',
     },

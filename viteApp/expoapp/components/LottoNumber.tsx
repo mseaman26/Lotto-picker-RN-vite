@@ -2,30 +2,54 @@
 import { View, Text, Platform, TouchableOpacity } from "react-native-web";
 import React, { useState } from "react";
 const isWeb = Platform.OS === 'web';
+import type { LottoSet } from "../utils/lottoStructurer";
 
 interface LottoNumberProps {
-    min: number;
-    max: number;
     value: number | null;
     color: string;
     spinning: boolean;
+    currentSet: Set<number>;
+    setIndex: number;
+    setCurrentSets: any;
 }
-export default function LottoNumber({ min, max, value = null, color, spinning = true }: LottoNumberProps) {
-    const [number, setNumber] = useState(value);
-    const [isSpinning, setIsSpinning] = useState(spinning);
+export default function LottoNumber({ value = null, color, spinning = false, currentSet, setIndex, setCurrentSets }: LottoNumberProps) {
+    const [number, setNumber] = useState<number | null>(value);
+    const [isSpinning, setIsSpinning] = useState<boolean>(spinning);
     console.log('spinning', spinning);
 
-    const handleSpinButton = () => {
+    let spinTimeOut: any;
+
+    const handleSpinButton = (): void => {
         if (isSpinning) {
            setIsSpinning(false);
+           console.log('value', number);
+           //remove current value from set at setIndex
+           clearTimeout(spinTimeOut);
+            setCurrentSets((prev: Set<number>[]) => {
+            const newSets = [...prev];
+            newSets[setIndex].delete(number);
+            return newSets;
+            })
         }else{
+            //if there is a value, add it back to the set
+            if(number !== null){
+                setCurrentSets((prev: Set<number>[]) => {
+                    const newSets = [...prev];
+                    newSets[setIndex].add(number);
+                    return newSets;
+                })
+            }
             setIsSpinning(true);
         }
     }
 
     if (isSpinning) {
-        setTimeout(() => {
-            setNumber(Math.floor(Math.random() * (max - min + 1)) + min);
+            spinTimeOut = setTimeout(() => {
+            //get random number from set at setIndex
+            const randomIndex = Math.floor(Math.random() * currentSet.size);
+            const randomValue = Array.from(currentSet)[randomIndex];
+            console.log('randomValue', randomValue);
+            setNumber((prev) => randomValue);
         }, 100);
     }
 

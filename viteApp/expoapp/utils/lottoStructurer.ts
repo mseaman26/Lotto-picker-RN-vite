@@ -1,37 +1,47 @@
+export interface LottoNumber{
+    setIndex: number
+    color: string
+}
+
+export type LottoSet = [number, number]
+
 export const lottoStructurer = (lotto: string) => {
-
-    interface LottoNumber{
-        min: number,
-        max: number,
-        color: string
-    }
-
 
     let structure: {
         title: string,
-        numbers: LottoNumber[]
+        numbers: LottoNumber[],
+        sets: LottoSet[]
     } 
 
     if(lotto === 'powerball'){
         structure = {
             title: 'Powerball',
+            sets: [
+                [1, 69],
+                [1, 26]
+            ],
             numbers: [
-                {min: 1, max: 69, color: 'white'},
-                {min: 1, max: 69, color: 'white'},
-                {min: 1, max: 69, color: 'white'},
-                {min: 1, max: 69, color: 'white'},
-                {min: 1, max: 26, color: 'red'}
-            ]
+                {color: 'white', setIndex: 0},
+                {color: 'white', setIndex: 0},
+                {color: 'white', setIndex: 0},
+                {color: 'white', setIndex: 0},
+                {color: 'red', setIndex: 1}
+            ],
+            
         }
     }else if(lotto === 'megamillions'){
         structure = {
             title: 'Mega Millions',
+            sets: [
+                [1, 70],
+                [1, 25]
+            ],
             numbers: [
-                {min: 1, max: 70, color: 'white'},
-                {min: 1, max: 70, color: 'white'},
-                {min: 1, max: 70, color: 'white'},
-                {min: 1, max: 70, color: 'white'},
-                {min: 1, max: 25, color: 'gold'}
+                {color: 'white', setIndex: 0},
+                {color: 'white', setIndex: 0},
+                {color: 'white', setIndex: 0},
+                {color: 'white', setIndex: 0},
+                {color: 'gold', setIndex: 1}
             ]
         }
     }
