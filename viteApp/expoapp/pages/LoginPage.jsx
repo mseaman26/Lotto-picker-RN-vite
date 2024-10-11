@@ -15,7 +15,7 @@ const LoginPage = () => {
 
     const handleEmailChang = (email) => {
         setError(' ');
-        setEmail(email);
+        setEmail((prev) => email);
     }
 
     const handlePasswordChange = (password) => {
@@ -37,9 +37,9 @@ const LoginPage = () => {
     };
 
     const handleKeyPress = (event) => {
-        if (event.key === 'Enter') {
-            handleLogin();
-        }
+        // if (event.key === 'Enter') {
+        //     handleLogin();
+        // }
     };
 
     useEffect(() => {
@@ -55,11 +55,7 @@ const LoginPage = () => {
         return <NavigateUniversal to="/" />;
     }
 
-    return (
-        <>
-        {loading && <LoadingScreen />}
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        
+    const content = (
         <View style={styles.container}>
             
             <Text style={styles.title}>Login</Text>
@@ -87,7 +83,16 @@ const LoginPage = () => {
 
             <Text>Don't have an account? <UniversalLink href={isWeb ? '/signup' : 'SignupPage'}>Sign up</UniversalLink></Text>
         </View>
-        </TouchableWithoutFeedback>
+    )
+
+    return (
+        <>
+            {loading && <LoadingScreen />}
+            {isWeb ? content : (
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                    {content}
+                </TouchableWithoutFeedback>
+            )}
         </>
     );
 };

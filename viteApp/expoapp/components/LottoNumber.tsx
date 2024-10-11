@@ -1,34 +1,34 @@
 
-import { View, Text, Platform, TouchableOpacity } from "react-native-web";
-import React, { useState } from "react";
+import { View, Text, Platform, TouchableOpacity, TextInput } from "react-native-web";
+import React, { useState, useEffect, useRef } from "react";
 const isWeb = Platform.OS === 'web';
 import type { LottoSet } from "../utils/lottoStructurer";
 
 interface LottoNumberProps {
     value: number | null;
     color: string;
-    spinning: boolean;
     currentSet: Set<number>;
     setIndex: number;
     setCurrentSets: any;
+    index: number;
 }
-export default function LottoNumber({ value = null, color, spinning = false, currentSet, setIndex, setCurrentSets }: LottoNumberProps) {
+export default function LottoNumber({ value = null, color, currentSet, setIndex, setCurrentSets, index }: LottoNumberProps) {
+    const [manualInput, setManualInput] = useState<string>('');
     const [number, setNumber] = useState<number | null>(value);
-    const [isSpinning, setIsSpinning] = useState<boolean>(spinning);
-    console.log('spinning', spinning);
+    const [isSpinning, setIsSpinning] = useState<boolean>(false);
 
-    let spinTimeOut: any;
+    const spinIntervalRef = useRef<any>(null); 
 
     const handleSpinButton = (): void => {
         if (isSpinning) {
-           setIsSpinning(false);
-           console.log('value', number);
-           //remove current value from set at setIndex
-           clearTimeout(spinTimeOut);
+            setIsSpinning(false);
+            console.log('value', number);
+            //remove current value from set at setIndex
+            clearInterval(spinIntervalRef.current);
             setCurrentSets((prev: Set<number>[]) => {
-            const newSets = [...prev];
-            newSets[setIndex].delete(number);
-            return newSets;
+                const newSets = [...prev];
+                newSets[setIndex].delete(number);
+                return newSets;
             })
         }else{
             //if there is a value, add it back to the set
@@ -43,15 +43,31 @@ export default function LottoNumber({ value = null, color, spinning = false, cur
         }
     }
 
-    if (isSpinning) {
-            spinTimeOut = setTimeout(() => {
+    const handleManualInput = (input: string): void => {
+        const num = parseInt(input, 10);
+        if (!isNaN(num) && currentSet.has(num)) {
+            setNumber(num); // Only update if the input is a valid number in the set
+            setCurrentSets((prev: Set<number>[]) => {
+                const newSets = [...prev];
+                newSets[setIndex].delete(number);
+                return newSets;
+            })
+        }
+        setManualInput(input);
+    };
+
+
+    useEffect(() => {
+        console.log(index, ' is spinning', isSpinning);
+        if (isSpinning) {
+            spinIntervalRef.current = setInterval(() => {
             //get random number from set at setIndex
             const randomIndex = Math.floor(Math.random() * currentSet.size);
             const randomValue = Array.from(currentSet)[randomIndex];
-            console.log('randomValue', randomValue);
             setNumber((prev) => randomValue);
-        }, 100);
+        }, 50);
     }
+    }, [isSpinning])
 
     return (
         <>
@@ -59,9 +75,17 @@ export default function LottoNumber({ value = null, color, spinning = false, cur
             <View style={{...styles.ball, backgroundColor: color}}>
                 <Text style={styles.number}>{number}</Text>
             </View>
-            <TouchableOpacity style={isSpinning ? styles.greenButtom : styles.button} onPress={handleSpinButton}>
-                <Text style={styles.buttonText}>{isSpinning ? 'Stop' : 'Spin'}</Text>
+            <TouchableOpacity style={isSpinning ? styles.stopButton : styles.button} onPress={handleSpinButton}>
+                <Text style={styles.buttonText}>{isSpinning ? 'Stop' : 'Start'}</Text>
             </TouchableOpacity>
+            {index === 0 && <Text >Manual Input</Text>}  
+            <TextInput
+                style={styles.input}
+                keyboardType="numeric"
+                value={manualInput}
+                onChangeText={handleManualInput}
+        
+            />
         </View>
         </>
     )
@@ -107,8 +131,8 @@ const styles = {
         justifyContent: 'center',
         
     },
-    greenButtom: {
-        backgroundColor: '#28A745', // Button color
+    stopButton: {
+        backgroundColor: 'red', // Button color
         paddingVertical: 10, // Vertical padding
         paddingHorizontal: 10, // Horizontal padding
         borderRadius: 25, // Rounded corners
@@ -128,5 +152,20 @@ const styles = {
         color: '#FFFFFF', // Text color
         fontSize: 12, // Font size
         fontWeight: 'bold', // Text boldness
+    },
+    input: {
+        marginTop: 10,
+        padding: 5,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        width: 50,
+        textAlign: 'center',
+    },
+    manualInput: {
+        length: 50,
+        fontSize: 12,
+        textAlign: 'center',
+        marginTop: 10,
     }
 }

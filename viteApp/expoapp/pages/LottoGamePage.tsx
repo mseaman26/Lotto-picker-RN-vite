@@ -48,7 +48,7 @@ export default function LottoGamePage() {
             <Text style={styles.header}>{lottoStructure.title}</Text>
             <View style={styles.numbersSection}>
                 {lottoStructure.numbers.map((number, index) => (
-                    <LottoNumber key={`lottoNumber_${index}`} value={null} color={number.color} spinning={false} currentSet={currentSets[number.setIndex]} setIndex={number.setIndex} setCurrentSets={setCurrentSets} />
+                    <LottoNumber key={`lottoNumber_${index}`} value={null} color={number.color} currentSet={currentSets[number.setIndex]} setIndex={number.setIndex} index={index} setCurrentSets={setCurrentSets} />
                 ))}
             </View>
         </View>

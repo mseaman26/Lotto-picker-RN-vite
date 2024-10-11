@@ -74,6 +74,7 @@ const AuthProvider = ({ children }) => {
                 const token = data.data;
                 console.log('token:', token);
                 const decoded = jwtDecode(token);
+                console.log('decoded:', decoded);
                 setUser(decoded.data);
 
                 // Store JWT in AsyncStorage

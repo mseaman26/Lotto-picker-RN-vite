@@ -52,39 +52,47 @@ const SignupPage = () => {
         return <NavigateUniversal to="/"/>;
     }
 
+    const content = (
+        <View style={styles.container}>
+            <Text style={styles.title}>Sign Up</Text>
+
+            <TextInput
+                placeholder="Email"
+                style={styles.input}
+                onChangeText={handleEmailChange}
+                value={email}
+            />
+
+            <TextInput
+                placeholder="Username (display name)"
+                style={styles.input}
+                onChangeText={handleUsernameChange}
+                value={username}
+            />
+
+            <TextInput
+                placeholder="Password"
+                secureTextEntry={true}
+                style={styles.input}
+                onChangeText={handlePasswordChange}
+                value={password}
+            />
+
+            <Button title="Sign Up" onPress={handleSignUp} />
+            <Text style={styles.error}>{error}</Text>
+            <Text>Already have an account? <UniversalLink href={isWeb ? '/login' : 'LoginPage'}>Login</UniversalLink></Text>
+        </View>
+    )
+
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View style={styles.container}>
-                {loading && <LoadingScreen />}
-                <Text style={styles.title}>Sign Up</Text>
-
-                <TextInput
-                    placeholder="Email"
-                    style={styles.input}
-                    onChangeText={handleEmailChange}
-                    value={email}
-                />
-
-                <TextInput
-                    placeholder="Username (display name)"
-                    style={styles.input}
-                    onChangeText={handleUsernameChange}
-                    value={username}
-                />
-
-                <TextInput
-                    placeholder="Password"
-                    secureTextEntry={true}
-                    style={styles.input}
-                    onChangeText={handlePasswordChange}
-                    value={password}
-                />
-
-                <Button title="Sign Up" onPress={handleSignUp} />
-                <Text style={styles.error}>{error}</Text>
-                <Text>Already have an account? <UniversalLink href={isWeb ? '/login' : 'LoginPage'}>Login</UniversalLink></Text>
-            </View>
-        </TouchableWithoutFeedback>
+        <>
+            {loading && <LoadingScreen />}
+            {isWeb ? content : (
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                    {content}
+                </TouchableWithoutFeedback>
+            )}
+        </>
     );
 };
 
