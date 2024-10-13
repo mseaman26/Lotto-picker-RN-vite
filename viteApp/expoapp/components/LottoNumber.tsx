@@ -44,12 +44,35 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
     }
 
     const handleManualInput = (input: string): void => {
-        const num = parseInt(input, 10);
-        if (!isNaN(num) && currentSet.has(num)) {
-            setNumber(num); // Only update if the input is a valid number in the set
+        if(input === ''){
+            setNumber(null);
+        }
+        if(number !== null){
+            console.log('adding number back to set: ', number);
             setCurrentSets((prev: Set<number>[]) => {
                 const newSets = [...prev];
-                newSets[setIndex].delete(number);
+                newSets[setIndex].add(number);
+                return newSets;
+            })
+        }
+        const num = parseInt(input, 10);
+        if (!isNaN(num) && currentSet.has(num)) {
+            setNumber((prevNum) => {
+                if (prevNum !== null) {
+                    //add previous number back to set
+                    setCurrentSets((prev: Set<number>[]) => {
+                        const newSets = [...prev];
+                        newSets[setIndex].add(prevNum);
+                        return newSets;
+                    })
+                }
+                return num;
+            }); // Only update if the input is a valid number in the set
+            console.log('number after state update', number);
+            console.log(num)
+            setCurrentSets((prev: Set<number>[]) => {
+                const newSets = [...prev];
+                newSets[setIndex].delete(num);
                 return newSets;
             })
         }
@@ -78,7 +101,6 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
             <TouchableOpacity style={isSpinning ? styles.stopButton : styles.button} onPress={handleSpinButton}>
                 <Text style={styles.buttonText}>{isSpinning ? 'Stop' : 'Start'}</Text>
             </TouchableOpacity>
-            {index === 0 && <Text >Manual Input</Text>}  
             <TextInput
                 style={styles.input}
                 keyboardType="numeric"
