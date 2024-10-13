@@ -30,6 +30,7 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
                 newSets[setIndex].delete(number);
                 return newSets;
             })
+            setManualInput(number ? number.toString() : '');
         }else{
             //if there is a value, add it back to the set
             if(number !== null){
@@ -98,9 +99,15 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
             <View style={{...styles.ball, backgroundColor: color}}>
                 <Text style={styles.number}>{number}</Text>
             </View>
+            <View style={styles.HeaderContainer}>
+
+            </View>
             <TouchableOpacity style={isSpinning ? styles.stopButton : styles.button} onPress={handleSpinButton}>
                 <Text style={styles.buttonText}>{isSpinning ? 'Stop' : 'Start'}</Text>
             </TouchableOpacity>
+            <View style={styles.HeaderContainer}>
+
+            </View>
             <TextInput
                 style={styles.input}
                 keyboardType="numeric"
@@ -118,15 +125,15 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        height: 200
     },
     ball: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 5,
         borderRadius: 50, 
-        width: 50,
-        height: 50,
+        width: 55,
+        height: 55,
     },
     number: {
         fontSize: 20,
@@ -135,10 +142,13 @@ const styles = {
         textAlign: 'center',
         
     },
+    HeaderContainer: {
+        height: 20
+    },
     button: {
         backgroundColor: '#007BFF', // Button color
-        paddingVertical: 10, // Vertical padding
-        paddingHorizontal: 10, // Horizontal padding
+        paddingVertical: 8, // Vertical padding
+        paddingHorizontal: 8, // Horizontal padding
         borderRadius: 25, // Rounded corners
         marginTop: 10,
         shadowColor: '#000', // Shadow color
@@ -147,8 +157,8 @@ const styles = {
         shadowRadius: 3.84, // Shadow blur radius
         elevation: 5, // Elevation for Android shadow
         alignItems: 'center',
-        height: 50,
-        width: 50,
+        height: 45,
+        width: 45,
         flexDirection: 'row',
         justifyContent: 'center',
         
@@ -172,7 +182,7 @@ const styles = {
     },
     buttonText: {
         color: '#FFFFFF', // Text color
-        fontSize: 12, // Font size
+        fontSize: 11, // Font size
         fontWeight: 'bold', // Text boldness
     },
     input: {

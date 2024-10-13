@@ -40,8 +40,10 @@ const AuthProvider = ({ children }) => {
       if (response.ok && data.success) {
         console.log('data:', data);
         // If login is successful, set user data
-        setUser(data.data.user);
-        localStorage.setItem('authToken', data.data.token); // Store JWT in localStorage
+        const decoded = jwtDecode(data.data);
+        console.log('decoded:', decoded);
+        setUser(decoded.data);
+        localStorage.setItem('authToken', data.data); // Store JWT in localStorage
       } else {
         console.error('Login failed:', data.error || 'Unknown error');
       }

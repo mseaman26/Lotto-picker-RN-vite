@@ -51,6 +51,8 @@ export default function LottoGamePage() {
                     <LottoNumber key={`lottoNumber_${index}`} value={null} color={number.color} currentSet={currentSets[number.setIndex]} setIndex={number.setIndex} index={index} setCurrentSets={setCurrentSets} />
                 ))}
             </View>
+            <Text style={{...styles.pickerHeader, ...styles.buttonHeader}}>Click a button to randomize</Text>
+            <Text style={{...styles.pickerHeader, ...styles.inputHeader}}>...or manually enter a number</Text>
         </View>
     )
 }
@@ -58,6 +60,7 @@ export default function LottoGamePage() {
 const styles = {
     container: {
         paddingTop: 50,
+        paddingHorizontal: 10,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: globalStyles.mainBG.backgroundColor,
@@ -69,8 +72,22 @@ const styles = {
     },
     numbersSection: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
+        maxWidth: 500,
+        width: '100%',
+
+    },
+    pickerHeader: {
+        fontSize: 15,
+        textAlign: 'center',
+        position: 'absolute',
+    },
+    buttonHeader:{
+        top: 185
+    },
+    inputHeader: {
+        top: 260,
     },
     instructions: {
         textAlign: 'center',
