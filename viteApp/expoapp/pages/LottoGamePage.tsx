@@ -1,7 +1,7 @@
 
 
 
-import { Text, View, Platform } from 'react-native-web';
+import { Text, View, Platform, Pressable } from 'react-native-web';
 import { getUrlParams } from '../hooks/getParams';
 import { lottoStructurer } from '../utils/lottoStructurer';
 import LottoNumber from '../components/LottoNumber';
@@ -19,6 +19,7 @@ export default function LottoGamePage() {
     console.log('lottoStructure', lottoStructure);
 
     const [currentSets, setCurrentSets] = useState<Set<number>[]>([]);
+    const [currentPicks, setCurrentPicks] = useState<Set<number>[]>([]);
 
     function createNumberSet(low: number, high: number): Set<number> {
         const numberSet = new Set<number>();
@@ -37,22 +38,32 @@ export default function LottoGamePage() {
             newSets.push(createNumberSet(...sets[i]));
         }
         setCurrentSets(newSets);
+
+        const newPicks = []
+        for(let i = 0; i < sets.length; i++){
+            newPicks.push(new Set<number>());
+        }
+        setCurrentPicks(newPicks);
     }, [])
 
     useEffect(() => {
         console.log('currentSets', currentSets);
     }, [currentSets])
+    useEffect(() => {
+        console.log('currentPicks', currentPicks);
+    }, [currentPicks])
 
     return (
         <View style={styles.container}>
             <Text style={styles.header}>{lottoStructure.title}</Text>
             <View style={styles.numbersSection}>
                 {lottoStructure.numbers.map((number, index) => (
-                    <LottoNumber key={`lottoNumber_${index}`} value={null} color={number.color} currentSet={currentSets[number.setIndex]} setIndex={number.setIndex} index={index} setCurrentSets={setCurrentSets} />
+                    <LottoNumber key={`lottoNumber_${index}`} value={null} color={number.color} currentSet={currentSets[number.setIndex]} setIndex={number.setIndex} index={index} setCurrentSets={setCurrentSets} setCurrentPicks={setCurrentPicks}/>
                 ))}
             </View>
             <Text style={{...styles.pickerHeader, ...styles.buttonHeader}}>Click a button to randomize</Text>
             <Text style={{...styles.pickerHeader, ...styles.inputHeader}}>...or manually enter a number</Text>
+            <Pressable><Text>Save</Text></Pressable>
         </View>
     )
 }

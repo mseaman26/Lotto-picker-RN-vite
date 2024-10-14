@@ -1,5 +1,5 @@
 
-import { View, Text, Platform, TouchableOpacity, TextInput } from "react-native-web";
+import { View, Text, Platform, Pressable, TextInput } from "react-native-web";
 import React, { useState, useEffect, useRef } from "react";
 const isWeb = Platform.OS === 'web';
 import type { LottoSet } from "../utils/lottoStructurer";
@@ -10,9 +10,10 @@ interface LottoNumberProps {
     currentSet: Set<number>;
     setIndex: number;
     setCurrentSets: any;
+    setCurrentPicks: any;
     index: number;
 }
-export default function LottoNumber({ value = null, color, currentSet, setIndex, setCurrentSets, index }: LottoNumberProps) {
+export default function LottoNumber({ value = null, color, currentSet, setIndex, setCurrentSets, setCurrentPicks, index }: LottoNumberProps) {
     const [manualInput, setManualInput] = useState<string>('');
     const [number, setNumber] = useState<number | null>(value);
     const [isSpinning, setIsSpinning] = useState<boolean>(false);
@@ -20,6 +21,7 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
     const spinIntervalRef = useRef<any>(null); 
 
     const handleSpinButton = (): void => {
+        console.log('set index', setIndex);
         if (isSpinning) {
             setIsSpinning(false);
             console.log('value', number);
@@ -30,6 +32,12 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
                 newSets[setIndex].delete(number);
                 return newSets;
             })
+            setCurrentPicks((prev: Set<number>[]) => {
+                const newPicks = [...prev];
+                newPicks[setIndex].add(number);
+                return newPicks;
+            })
+            
             setManualInput(number ? number.toString() : '');
         }else{
             //if there is a value, add it back to the set
@@ -38,6 +46,11 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
                     const newSets = [...prev];
                     newSets[setIndex].add(number);
                     return newSets;
+                })
+                setCurrentPicks((prev: Set<number>[]) => {
+                    const newPicks = [...prev];
+                    newPicks[setIndex].delete(number);
+                    return newPicks;
                 })
             }
             setIsSpinning(true);
@@ -55,6 +68,11 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
                 newSets[setIndex].add(number);
                 return newSets;
             })
+            setCurrentPicks((prev: Set<number>[]) => {
+                const newPicks = [...prev];
+                newPicks[setIndex].delete(number);
+                return newPicks;
+            })
         }
         const num = parseInt(input, 10);
         if (!isNaN(num) && currentSet.has(num)) {
@@ -66,6 +84,11 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
                         newSets[setIndex].add(prevNum);
                         return newSets;
                     })
+                    setCurrentPicks((prev: Set<number>[]) => {
+                        const newPicks = [...prev];
+                        newPicks[setIndex].delete(prevNum);
+                        return newPicks
+                    })
                 }
                 return num;
             }); // Only update if the input is a valid number in the set
@@ -75,6 +98,11 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
                 const newSets = [...prev];
                 newSets[setIndex].delete(num);
                 return newSets;
+            })
+            setCurrentPicks((prev: Set<number>[]) => {
+                const newPicks = [...prev];
+                newPicks[setIndex].add(num);
+                return newPicks;
             })
         }
         setManualInput(input);
@@ -102,9 +130,9 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
             <View style={styles.HeaderContainer}>
 
             </View>
-            <TouchableOpacity style={isSpinning ? styles.stopButton : styles.button} onPress={handleSpinButton}>
+            <Pressable style={isSpinning ? styles.stopButton : styles.button} onPress={handleSpinButton}>
                 <Text style={styles.buttonText}>{isSpinning ? 'Stop' : 'Start'}</Text>
-            </TouchableOpacity>
+            </Pressable>
             <View style={styles.HeaderContainer}>
 
             </View>
@@ -175,8 +203,8 @@ const styles = {
         shadowRadius: 3.84, // Shadow blur radius
         elevation: 5, // Elevation for Android shadow
         alignItems: 'center',
-        height: 50,
-        width: 50,
+        height: 45,
+        width: 45,
         flexDirection: 'row',
         justifyContent: 'center',
     },
