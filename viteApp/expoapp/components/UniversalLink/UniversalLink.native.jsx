@@ -1,13 +1,13 @@
 import React from 'react';
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, Pressable, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
 
 const LinkWrapper = ({ href, children, style }) => {
   return (
     <Link href={href} asChild>
-      <TouchableOpacity style={[styles.linkContainer, style]}>
+      <Pressable style={[styles.linkContainer, style]}>
         <Text style={styles.linkText}>{children}</Text>
-      </TouchableOpacity>
+      </Pressable>
     </Link>
   );
 };

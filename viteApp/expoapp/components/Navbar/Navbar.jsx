@@ -1,6 +1,6 @@
 // Navbar.js
 import React, {useContext} from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native-web';
+import { View, Text, Pressable, StyleSheet, Platform } from 'react-native-web';
 import { globalStyles } from '../../styles/globalStyles';
 import UniversalLink from '../UniversalLink/UniversalLink';
 import { AuthContext } from '../../context/AuthContext';
@@ -28,7 +28,7 @@ const Navbar = () => {
             <UniversalLink href={isWeb ? '/profile' : 'ProfilePage'}>
                 <Text style={styles.navItem}>Profile</Text>
             </UniversalLink>
-            <TouchableOpacity onPress={handleLogout}><Text style={styles.navItem}>Logout</Text></TouchableOpacity>
+            <Pressable onPress={handleLogout}><Text style={styles.navItem}>Logout</Text></Pressable>
 
         </View>
     );

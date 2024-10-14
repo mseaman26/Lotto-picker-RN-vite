@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, FlatList } from 'react-native-web';
+import { View, Text, StyleSheet, Modal, Pressable, FlatList } from 'react-native-web';
 
 const CustomDropdownPicker = ({ 
     label, 
@@ -19,14 +19,14 @@ const CustomDropdownPicker = ({
     return (
         <View style={styles.container}>
             {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
-            <TouchableOpacity 
+            <Pressable 
                 onPress={() => setModalVisible(true)} 
                 style={[styles.touchable, style]}
             >
                 <Text style={styles.selectedValue}>
                     {options.find(option => option.value === selectedValue)?.label || 'Select an option'}
                 </Text>
-            </TouchableOpacity>
+            </Pressable>
 
             <Modal
                 animationType="slide"
@@ -40,14 +40,14 @@ const CustomDropdownPicker = ({
                             data={options}
                             keyExtractor={(item) => item.value}
                             renderItem={({ item }) => (
-                                <TouchableOpacity onPress={() => handleSelect(item)} style={styles.item}>
+                                <Pressable onPress={() => handleSelect(item)} style={styles.item}>
                                     <Text style={styles.itemText}>{item.label}</Text>
-                                </TouchableOpacity>
+                                </Pressable>
                             )}
                         />
-                        <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
+                        <Pressable onPress={() => setModalVisible(false)} style={styles.closeButton}>
                             <Text style={styles.closeButtonText}>Close</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
                 </View>
             </Modal>

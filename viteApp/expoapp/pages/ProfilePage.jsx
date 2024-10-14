@@ -1,11 +1,23 @@
-import React from 'react';
+import React, {useEffect, useContext} from 'react';
 import { View, Text, Image, Button, StyleSheet, Platform } from 'react-native-web';
 import UniversalLink from '../components/UniversalLink/UniversalLink';
 import { globalStyles } from '../styles/globalStyles';
+import { getLottoPicksByUserId } from '../utils/apiHelpers';
+import { AuthContext } from '../context/AuthContext';
 
 const ProfilePage = () => {
 
     const isWeb = Platform.OS === 'web';
+    const { user } = useContext(AuthContext);
+
+    useEffect(() => {
+        getLottoPicksByUserId(user.id)
+        .then((data) => {
+            console.log('data', data);
+        }).catch((error) => {
+            console.log('error', error);
+        });
+    }, [])
 
 
     return (

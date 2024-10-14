@@ -1,6 +1,6 @@
 // In your HomePage.js or HomePage.jsx
 
-import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native-web'; 
+import { View, Text, StyleSheet, Platform } from 'react-native-web'; 
 import { useState, useEffect, useContext } from 'react';
 import CustomPicker from '../components/PickerUniversal/CusomPicker/CustomPicker';
 import UniversalLink from '../components/UniversalLink/UniversalLink';
