@@ -36,8 +36,11 @@ const AuthProvider = ({ children }) => {
             if (response.ok && data.success) {
                 // If login is successful, set user data
                 console.log('data:', data);
-                const token = data.data.token;
-                setUser(data.data.user);
+                const token = data.data;
+                console.log('token:', token);
+                const decoded = jwtDecode(token);
+                console.log('decoded:', decoded);
+                setUser(decoded.data);
 
                 // Store JWT in AsyncStorage
                 await AsyncStorage.setItem('authToken', token);
