@@ -26,7 +26,7 @@ const Navbar = () => {
                 <Text style={styles.navItem}>Home</Text>
             </UniversalLink>
             <UniversalLink href={isWeb ? '/profile' : 'ProfilePage'}>
-                <Text style={styles.navItem}>Profile</Text>
+                <Text style={styles.navItem}>My Picks</Text>
             </UniversalLink>
             <Pressable onPress={handleLogout}><Text style={styles.navItem}>Logout</Text></Pressable>
 

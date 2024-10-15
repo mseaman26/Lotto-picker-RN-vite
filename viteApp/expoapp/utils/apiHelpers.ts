@@ -23,7 +23,7 @@ export const saveLottoPick = async (userId: string, gameName: string, numbers: n
     });
 
     if (!response.ok) {
-        throw new Error('Network response was not ok');
+        return { data: [], success: false };
     }
 
     const data: unknown = await response.json(); // Use unknown to enforce type checking later

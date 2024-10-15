@@ -25,6 +25,7 @@ export default function LottoGamePage() {
     const [currentSets, setCurrentSets] = useState<Set<number>[]>([]);
     const [picksArray, setPicksArray] = useState<(number | null)[]>(Array(lottoStructure.numbers.length).fill(null));
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [successMessage, setSuccessMessage] = useState<string>('');
 
 
     function createNumberSet(low: number, high: number): Set<number> {
@@ -37,14 +38,21 @@ export default function LottoGamePage() {
         return numberSet;
     }
 
-    const handleSavePick = () => {
+    const handleSavePick = async () => {
+        setErrorMessage('');
+        setSuccessMessage('');
         //check if all numbers have been picked
         if(picksArray.includes(null)){
             setErrorMessage('All numbers must be chosen');
             return
         }
         if(user.id && lottoGame && picksArray){
-            saveLottoPick(user.id, lottoGame, picksArray as number[]);
+            const response = await saveLottoPick(user.id, lottoGame, picksArray as number[]);
+            if(response.success){
+                setSuccessMessage('Pick saved successfully!');
+            }else{
+                setErrorMessage('Error saving pick, something went wrong with the server.  So sorry!');
+            }
         }
         
 
@@ -74,7 +82,11 @@ export default function LottoGamePage() {
 
     return (
         <View style={styles.container}>
-            <View style={styles.errorMessageContainer}><Text style={styles.errorMessage}>{errorMessage}</Text></View>
+            <View style={styles.errorMessageContainer}>
+                <Text style={styles.errorMessage}>{errorMessage}</Text>
+                <Text style={styles.successMessage}>{successMessage}</Text>
+            </View>
+            
             <Text style={styles.header}>{lottoStructure.title}</Text>
             <View style={styles.numbersSection}>
                 {lottoStructure.numbers.map((number, index) => (
@@ -132,6 +144,10 @@ const styles = {
     },
     errorMessage: {
         color: 'red',
+        fontSize: 20,
+    },
+    successMessage: {
+        color: 'green',
         fontSize: 20,
     }
 }

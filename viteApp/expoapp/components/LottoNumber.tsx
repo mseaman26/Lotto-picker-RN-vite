@@ -35,6 +35,11 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
                     return newSets;
                 })
             }
+            setPicksArray((prev: (number | null)[]) => {
+                const newPicksArray = [...prev];
+                newPicksArray[index] = number;
+                return newPicksArray;
+            })
             setManualInput(number ? number.toString() : '');
         }else{
             //if there is a value, add it back to the set

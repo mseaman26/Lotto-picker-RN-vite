@@ -37,17 +37,35 @@ const ProfilePage = () => {
 
     return (
         <View style={styles.container}>
-
-        <Text style={styles.name}>{user.username}</Text>
-        <UniversalLink href={isWeb ? '/' : '/'}>Back Home</UniversalLink>
+          <Text style={styles.name}>{user.username}'s picks</Text>
+          <View>
+            {myPicks && myPicks.map((pick, index) => {
+              const date = new Date(pick.createdAt);
+              const formattedDate = date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+                hour12: true, // for 12-hour clock
+              });
+              return (
+                <View key={index}>
+                  <Text>{pick.gameName}</Text>
+                  <Text>{pick.numbers.join(', ')}</Text>
+                  <Text>{formattedDate}</Text>
+                  <br />    
+                </View>
+              )
+            })}
+          </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
     backgroundColor: globalStyles.mainBG.backgroundColor,
