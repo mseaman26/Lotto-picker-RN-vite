@@ -7,7 +7,7 @@ const MainLayout = () => {
   return (
     <div style={styles.container}>
       <Navbar />  {/* This layout has the navbar */}
-      <main style={{height: '100vh'}}>
+      <main >
         <Outlet />  {/* This renders the child routes */}
       </main>
     </div>
@@ -19,7 +19,6 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: globalStyles.mainBG.backgroundColor,
-    height: '100vh',
   },
   navbar: {
     height: '50px',

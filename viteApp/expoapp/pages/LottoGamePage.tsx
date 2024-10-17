@@ -9,6 +9,7 @@ import {globalStyles} from '../styles/globalStyles';
 import { useState, useEffect, useContext } from 'react';
 import { saveLottoPick } from '../utils/apiHelpers';
 import { AuthContext } from '../context/AuthContext';
+import type { LottoStructure } from '../interfaces/interfaces';
 
 const isWeb = Platform.OS === 'web';
 
@@ -38,7 +39,24 @@ export default function LottoGamePage() {
         return numberSet;
     }
 
+    const sortNumbersBySet = (numbers: number[], lottoStructure: LottoStructure ): number[] => {
+        console.log('numbers', numbers);
+        const finalNumbers: number[][] = [];
+        for(let i = 0; i < lottoStructure.sets.length; i++){
+            finalNumbers.push([]);
+        }
+        for(let i = 0; i < numbers.length; i++){
+            finalNumbers[lottoStructure.numbers[i].setIndex].push(numbers[i]);
+        }
+        for(let i = 0; i < finalNumbers.length; i++){
+            finalNumbers[i].sort((a, b) => a - b);
+        }
+        const flattened = finalNumbers.flat();
+        return flattened;
+    }
+
     const handleSavePick = async () => {
+        
         setErrorMessage('');
         setSuccessMessage('');
         //check if all numbers have been picked
@@ -47,7 +65,8 @@ export default function LottoGamePage() {
             return
         }
         if(user.id && lottoGame && picksArray){
-            const response = await saveLottoPick(user.id, lottoGame, picksArray as number[]);
+            const sortedPicksArray = sortNumbersBySet(picksArray as number[], lottoStructure);
+            const response = await saveLottoPick(user.id, lottoGame, sortedPicksArray as number[]);
             if(response.success){
                 setSuccessMessage('Pick saved successfully!');
             }else{
@@ -90,7 +109,7 @@ export default function LottoGamePage() {
             <Text style={styles.header}>{lottoStructure.title}</Text>
             <View style={styles.numbersSection}>
                 {lottoStructure.numbers.map((number, index) => (
-                    <LottoNumber key={`lottoNumber_${index}`} value={picksArray !== null ? picksArray[index] : null} color={number.color} currentSet={currentSets[number.setIndex]} setIndex={number.setIndex} index={index} setCurrentSets={setCurrentSets} setPicksArray={setPicksArray} setErrorMessage={setErrorMessage}/>
+                    <LottoNumber key={`lottoNumber_${index}`} value={picksArray !== null ? picksArray[index] : null} color={number.color} currentSet={currentSets[number.setIndex]} setIndex={number.setIndex} index={index} setCurrentSets={setCurrentSets} picksArray={picksArray} setPicksArray={setPicksArray} setErrorMessage={setErrorMessage}/>
                 ))}
             </View>
             <Text style={{...styles.pickerHeader, ...styles.buttonHeader}}>Click a button to randomize</Text>
@@ -104,9 +123,10 @@ const styles = {
     container: {
         paddingTop: 0,
         paddingHorizontal: 10,
-        justifyContent: 'center',
+
         alignItems: 'center',
         backgroundColor: globalStyles.mainBG.backgroundColor,
+        minHeight: '100vh',
     },
     header: {
         fontSize: 40,

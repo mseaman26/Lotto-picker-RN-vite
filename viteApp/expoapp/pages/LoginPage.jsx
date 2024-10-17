@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Button,Platform, TouchableWithoutFeedback, Keyboard } from 'react-native-web';
+import { View, Text, TextInput, Pressable,Platform, TouchableWithoutFeedback, Keyboard } from 'react-native-web';
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import NavigateUniversal from '../components/NavigaveUniversal/NavigateUniversal';
@@ -77,7 +77,7 @@ const LoginPage = () => {
                 onKeyPress={handleKeyPress} // Add this to detect Enter key
             />
 
-            <Button title="Login" onPress={handleLogin} />
+            <Pressable style={styles.loginButton} onPress={handleLogin}><Text style={styles.loginButtonText}>Login</Text></Pressable>
 
             <Text style={styles.error}>{error}</Text>
 
@@ -103,6 +103,7 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
+        
     },
     title: {
         fontSize: 24,
@@ -116,6 +117,21 @@ const styles = {
         borderColor: '#ccc',
         marginBottom: 20,
         borderRadius: 5,
+    },
+    loginButton:{
+        backgroundColor: '#007BFF',
+        padding: 10,
+        borderRadius: 5,
+        width: '100%',
+        maxWidth: 400,
+        alignItems: 'center',
+        color: 'white',
+    },
+    loginButtonText: {
+        color: 'white',
+        fontSize: 16,
+
+
     },
     error: {
         color: 'red', // Style for error message

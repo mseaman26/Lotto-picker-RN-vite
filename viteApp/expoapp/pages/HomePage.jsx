@@ -6,6 +6,7 @@ import CustomPicker from '../components/PickerUniversal/CusomPicker/CustomPicker
 import UniversalLink from '../components/UniversalLink/UniversalLink';
 import NavigateUniversal from '../components/NavigaveUniversal/NavigateUniversal';
 import { AuthContext } from '../context/AuthContext';
+import {globalStyles} from '../styles/globalStyles';
 
 const isWeb = Platform.OS === 'web';
 
@@ -34,7 +35,7 @@ const HomePage = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Welcome to the Home Page, {user?.username}!</Text>
+            <Text style={styles.title}>Welcome to the Home Pageff, {user?.username}!</Text>
             <CustomPicker
                 label="Select your Lotto game"
                 selectedValue={lottoGame}
@@ -71,8 +72,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#f0f0f0',
         padding: 20,
-        height: '100%',
+
         paddingTop: isWeb? '35vh' : '45%',
+        backgroundColor: globalStyles.mainBG.backgroundColor,
+        height: '100vh',
     },
     title: {
         fontSize: 24,

@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1, // Allow the container to take the full height
         backgroundColor: globalStyles.mainBG.backgroundColor, 
-        position: 'absolute',
+
         top: 0,
         bottom: 0,
         left: 0,

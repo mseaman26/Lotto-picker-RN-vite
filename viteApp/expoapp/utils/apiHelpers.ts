@@ -2,7 +2,7 @@ import { LottoPicksResponse } from "../interfaces/interfaces";
 
 
 export const getLottoPicksByUserId = async (userId: string): Promise<LottoPicksResponse> => {
-    const response = await fetch(`/api/lottopicks/${userId}`);
+    const response = await fetch(`https://lotto-server-next.vercel.app/api/lottopicks/${userId}`);
 
     if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -14,7 +14,7 @@ export const getLottoPicksByUserId = async (userId: string): Promise<LottoPicksR
 };
 
 export const saveLottoPick = async (userId: string, gameName: string, numbers: number[]): Promise<LottoPicksResponse> => {
-    const response = await fetch(`/api/lottopicks/${userId}`, {
+    const response = await fetch(`https://lotto-server-next.vercel.app/api/lottopicks/${userId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

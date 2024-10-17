@@ -11,10 +11,11 @@ interface LottoNumberProps {
     setIndex: number;
     setCurrentSets: any;
     index: number;
+    picksArray: (number | null)[];
     setPicksArray: any;
     setErrorMessage: any;
 }
-export default function LottoNumber({ value = null, color, currentSet, setIndex, setCurrentSets, index, setPicksArray, setErrorMessage }: LottoNumberProps) {
+export default function LottoNumber({ value = null, color, currentSet, setIndex, setCurrentSets, index, picksArray, setPicksArray, setErrorMessage }: LottoNumberProps) {
     const [manualInput, setManualInput] = useState<string>('');
     const [number, setNumber] = useState<number | null>(value);
     const [isSpinning, setIsSpinning] = useState<boolean>(false);
@@ -85,54 +86,7 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
             }
             
         }
-        // if(input === ''){
-        //     setNumber(null);
-        // }
-        // if(number !== null){
-        //     console.log('adding number back to set: ', number);
-        //     setCurrentSets((prev: Set<number>[]) => {
-        //         const newSets = [...prev];
-        //         newSets[setIndex].add(number);
-        //         return newSets;
-        //     })
-        //     setPicksArray((prev: (number | null)[]) => {
-        //         const newPicksArray = [...prev];
-        //         newPicksArray[index] = number;
-        //         return newPicksArray;
-        //     })
-        // }
-        // const num = parseInt(input, 10);
-        // if (!isNaN(num) && currentSet.has(num)) {
-        //     setNumber((prevNum) => {
-        //         if (prevNum !== null) {
-        //             //add previous number back to set
-        //             setCurrentSets((prev: Set<number>[]) => {
-        //                 const newSets = [...prev];
-        //                 newSets[setIndex].add(prevNum);
-        //                 return newSets;
-        //             })
-        //             setPicksArray((prev: (number | null)[]) => {
-        //                 const newPicksArray = [...prev];
-        //                 newPicksArray[index] = prevNum;
-        //                 return newPicksArray;
-        //             })
-        //         }
-        //         return num;
-        //     }); // Only update if the input is a valid number in the set
-        //     console.log('number after state update', number);
-        //     console.log(num)
-        //     setCurrentSets((prev: Set<number>[]) => {
-        //         const newSets = [...prev];
-        //         newSets[setIndex].delete(num);
-        //         return newSets;
-        //     })
-        //     setCurrentPicks((prev: Set<number>[]) => {
-        //         const newPicks = [...prev];
-        //         newPicks[setIndex].add(num);
-        //         return newPicks;
-        //     })
-        // }
-        // setManualInput(input);
+      
     };
 
 
@@ -149,19 +103,14 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
     }, [isSpinning])
 
     useEffect(() => {
-        // console.log('value at index', index, 'changed to', number);
-        // setPicksArray((prev: (number | null)[]) => {
-        //     console.log('prev picks array', prev);
-        //     const newPicksArray = [...prev];
-        //     console.log('new picks array', newPicksArray);
-        //     if(number === null){
-        //         newPicksArray[index] = null;
-        //         return newPicksArray;
-        //     }
-        //     newPicksArray[index] = number;
-        //     return newPicksArray;
-        // })
-    }, [number])
+        if(picksArray[index] !== null){
+            setNumber(picksArray[index]);
+            setManualInput(picksArray[index].toString());
+        }else{
+            setNumber(null);
+            setManualInput('');
+        }
+    },[picksArray])
 
     return (
         <>

@@ -5,7 +5,7 @@ import { Link } from 'expo-router';
 const LinkWrapper = ({ href, children, style }) => {
   return (
     <Link href={href} asChild>
-      <Pressable style={[styles.linkContainer, style]}>
+      <Pressable>
         <Text style={styles.linkText}>{children}</Text>
       </Pressable>
     </Link>

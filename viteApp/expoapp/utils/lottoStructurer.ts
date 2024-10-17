@@ -1,3 +1,4 @@
+import type { LottoStructure } from "../interfaces/interfaces"
 export interface LottoNumber{
     setIndex: number
     color: string
@@ -7,11 +8,11 @@ export type LottoSet = [number, number]
 
 export const lottoStructurer = (lotto: string) => {
 
-    let structure: {
-        title: string,
-        numbers: LottoNumber[],
-        sets: LottoSet[]
-    } 
+    let structure: LottoStructure = {
+        title: '',
+        numbers: [],
+        sets: []
+    }
 
     if(lotto === 'powerball'){
         structure = {
