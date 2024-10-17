@@ -84,19 +84,30 @@ export default function LottoGamePage() {
             newSets.push(createNumberSet(...sets[i]));
         }
         setCurrentSets(newSets);
-
+        if(lottoGame && !localStorage.getItem(lottoGame)){
+            const newPicksArray = new Array(lottoStructure.numbers.length).fill(null);
+            setPicksArray(newPicksArray);
+        }else if(lottoGame && localStorage.getItem(lottoGame)){
+            const storedPicksArray = localStorage.getItem(lottoGame);
+            const newPicksArray = storedPicksArray ?  JSON.parse(storedPicksArray) : new Array(lottoStructure.numbers.length).fill(null);
+            console.log('picksArray from local storage', newPicksArray);
+            setPicksArray(newPicksArray);
+        }
         //create an array that is the length of lottoStructure.numbers and initialize all values to null
-        const newPicksArray = new Array(lottoStructure.numbers.length).fill(null);
-        setPicksArray(newPicksArray);
+        
     }, [])
 
     useEffect(() => {
         console.log('currentSets', currentSets);
     }, [currentSets])
+
     useEffect(() => {
-        console.log('here')
         console.log('picksArray', picksArray);
-    })
+        if(lottoGame){
+            localStorage.setItem(lottoGame, JSON.stringify(picksArray));
+        }
+    }, [picksArray])
+
 
 
     return (
