@@ -68,6 +68,11 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
         }
         if(isNaN(numericalInput)){
             setNumber(null); 
+            setPicksArray((previous: (number | null)[]): (number | null)[] => {
+                const newPicksArray = [...previous];
+                newPicksArray[index] = null;
+                return newPicksArray;
+            })
         }else{
             if(currentSet.has(numericalInput)){
                 setNumber(numericalInput);

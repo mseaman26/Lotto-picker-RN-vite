@@ -7,7 +7,7 @@ import { lottoStructurer } from '../utils/lottoStructurer';
 import LottoNumber from '../components/LottoNumber';
 import {globalStyles} from '../styles/globalStyles';
 import { useState, useEffect, useContext } from 'react';
-import { saveLottoPick } from '../utils/apiHelpers';
+import { saveLottoPick, isPickUnique } from '../utils/apiHelpers';
 import { AuthContext } from '../context/AuthContext';
 import type { LottoStructure } from '../interfaces/interfaces';
 
@@ -55,6 +55,24 @@ export default function LottoGamePage() {
         return flattened;
     }
 
+    const handleCheckUniquePick = async () => {
+        setErrorMessage('');
+        setSuccessMessage('');
+        if(picksArray.includes(null)){
+            setErrorMessage('All numbers must be chosen');
+            return
+        }
+        if(lottoGame && picksArray){
+            const sortedPicksArray = sortNumbersBySet(picksArray as number[], lottoStructure);
+            const response = await isPickUnique(lottoGame, sortedPicksArray as number[]);
+            if(response.data === true){
+                setSuccessMessage('These numbers have not been picked by anyone else in our Database!');
+            }else{
+                setErrorMessage('These numbers have already been picked by someone else!');
+            }
+        }
+    }
+
     const handleSavePick = async () => {
         
         setErrorMessage('');
@@ -92,6 +110,15 @@ export default function LottoGamePage() {
             const newPicksArray = storedPicksArray ?  JSON.parse(storedPicksArray) : new Array(lottoStructure.numbers.length).fill(null);
             console.log('picksArray from local storage', newPicksArray);
             setPicksArray(newPicksArray);
+            for(let i = 0; i < newPicksArray.length; i++){
+                if(newPicksArray[i] !== null){
+                    setCurrentSets((prev: Set<number>[]) => {
+                        const newSets = [...prev];
+                        newSets[lottoStructure.numbers[i].setIndex].delete(newPicksArray[i]);
+                        return newSets;
+                    })
+                }
+            }
         }
         //create an array that is the length of lottoStructure.numbers and initialize all values to null
         
@@ -125,7 +152,14 @@ export default function LottoGamePage() {
             </View>
             <Text style={{...styles.pickerHeader, ...styles.buttonHeader}}>Click a button to randomize</Text>
             <Text style={{...styles.pickerHeader, ...styles.inputHeader}}>...or manually enter a number</Text>
-            <Pressable onPress={handleSavePick} ><Text>Save</Text></Pressable>
+            <View style={{visibility: !picksArray.includes(null) ? 'visible' : 'hidden'}}>
+                <Pressable onPress={handleCheckUniquePick} style={styles.checkButton}>
+                    <Text style={styles.checkButtonText}>Has anyone else picked these numbers?</Text>
+                </Pressable>
+                <Pressable onPress={handleSavePick} style={styles.saveButton}>
+                    <Text style={styles.saveButtonText}>Save</Text>
+                </Pressable>
+            </View>
         </View>
     )
 }
@@ -180,5 +214,43 @@ const styles = {
     successMessage: {
         color: 'green',
         fontSize: 20,
-    }
+    },
+    saveButton: {
+        backgroundColor: '#4CAF50', // Green background
+        paddingVertical: 12, // Vertical padding for the button
+        paddingHorizontal: 24, // Horizontal padding for the button
+        borderRadius: 8, // Rounded corners
+        marginTop: 20, // Add some space above the button
+        alignItems: 'center', // Center text horizontally
+        justifyContent: 'center', // Center text vertically
+        shadowColor: '#000', // Shadow effect for better visibility
+        shadowOffset: { width: 0, height: 2 }, // Offset for the shadow
+        shadowOpacity: 0.3, // Shadow transparency
+        shadowRadius: 3.84, // Blur radius for shadow
+        elevation: 5, // For Android shadow support
+    },
+    saveButtonText: {
+        color: '#fff', // White text color
+        fontSize: 18, // Text size
+        fontWeight: 'bold', // Bold text
+    },
+    checkButton: {
+        backgroundColor: '#FFA500', // Orange background for the Check button
+        paddingVertical: 12,
+        paddingHorizontal: 24,
+        borderRadius: 8,
+        marginTop: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    checkButtonText: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
 }
