@@ -107,34 +107,38 @@ export default function LottoGamePage() {
     }
 
     useEffect(() => {
-        const newSets = []
+        const initializeData = async () => {
+            const newSets = []
 
-        for(let i = 0; i < sets.length; i++){
-            newSets.push(createNumberSet(...sets[i]));
-        }
-        setCurrentSets(newSets);
-        if(lottoGame && !customStorage.getItem(lottoGame)){
-            const newPicksArray = new Array(lottoStructure.numbers.length).fill(null);
-            setPicksArray(newPicksArray);
-        }else if(lottoGame && customStorage.getItem(lottoGame)){
-            const storedPicksArray = customStorage.getItem(lottoGame);
-            const newPicksArray = storedPicksArray ?  JSON.parse(storedPicksArray) : new Array(lottoStructure.numbers.length).fill(null);
-            console.log('picksArray from local storage', newPicksArray);
-            setPicksArray(newPicksArray);
-            for(let i = 0; i < newPicksArray.length; i++){
-                if(newPicksArray[i] !== null){
-                    setCurrentSets((prev: Set<number>[]) => {
-                        const newSets = [...prev];
-                        newSets[lottoStructure.numbers[i].setIndex].delete(newPicksArray[i]);
-                        return newSets;
-                    })
+            for(let i = 0; i < sets.length; i++){
+                newSets.push(createNumberSet(...sets[i]));
+            }
+            setCurrentSets(newSets);
+            if(lottoGame && !customStorage.getItem(lottoGame)){
+                const newPicksArray = new Array(lottoStructure.numbers.length).fill(null);
+                setPicksArray(newPicksArray);
+            }else if(lottoGame && customStorage.getItem(lottoGame)){
+                const storedPicksArray = await customStorage.getItem(lottoGame);
+                console.log('storedPicksArray', storedPicksArray);
+                const newPicksArray = storedPicksArray ?  JSON.parse(storedPicksArray) : new Array(lottoStructure.numbers.length).fill(null);
+                console.log('picksArray from local storage', newPicksArray);
+                setPicksArray(newPicksArray);
+                for(let i = 0; i < newPicksArray.length; i++){
+                    if(newPicksArray[i] !== null){
+                        setCurrentSets((prev: Set<number>[]) => {
+                            const newSets = [...prev];
+                            newSets[lottoStructure.numbers[i].setIndex].delete(newPicksArray[i]);
+                            return newSets;
+                        })
+                    }
                 }
             }
+            //create an array that is the length of lottoStructure.numbers and initialize all values to null
+            if(lottoGame){
+                console.log('custom storage', customStorage.getItem(lottoGame));
+            }
         }
-        //create an array that is the length of lottoStructure.numbers and initialize all values to null
-        if(lottoGame){
-            console.log('custom storage', customStorage.getItem(lottoGame));
-        }
+        initializeData();
        
     }, [])
 
