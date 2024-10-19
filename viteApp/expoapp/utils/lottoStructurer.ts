@@ -11,7 +11,8 @@ export const lottoStructurer = (lotto: string) => {
     let structure: LottoStructure = {
         title: '',
         numbers: [],
-        sets: []
+        sets: [],
+        days: []
     }
 
     if(lotto === 'powerball'){
@@ -29,6 +30,7 @@ export const lottoStructurer = (lotto: string) => {
                 {color: 'white', setIndex: 0},
                 {color: 'red', setIndex: 1}
             ],
+            days: [1, 3, 6]
             
         }
     }else if(lotto === 'megamillions'){
@@ -45,7 +47,8 @@ export const lottoStructurer = (lotto: string) => {
                 {color: 'white', setIndex: 0},
                 {color: 'white', setIndex: 0},
                 {color: 'gold', setIndex: 1}
-            ]
+            ],
+            days: [2, 5]
         }
     }
 

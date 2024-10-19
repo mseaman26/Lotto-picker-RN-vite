@@ -185,6 +185,7 @@ const styles = {
         width: 45,
         flexDirection: 'row',
         justifyContent: 'center',
+        userSelect: 'none'
         
     },
     stopButton: {
@@ -203,6 +204,7 @@ const styles = {
         width: 45,
         flexDirection: 'row',
         justifyContent: 'center',
+        userSelect: 'none'
     },
     buttonText: {
         color: '#FFFFFF', // Text color

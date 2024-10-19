@@ -10,6 +10,9 @@ import { useState, useEffect, useContext } from 'react';
 import { saveLottoPick, isPickUnique } from '../utils/apiHelpers';
 import { AuthContext } from '../context/AuthContext';
 import type { LottoStructure } from '../interfaces/interfaces';
+import DatePicker from '../components/DatePicker/DatePicker';
+import {customStorage} from '../utils/customStorage/customStorage';
+
 
 const isWeb = Platform.OS === 'web';
 
@@ -27,6 +30,7 @@ export default function LottoGamePage() {
     const [picksArray, setPicksArray] = useState<(number | null)[]>(Array(lottoStructure.numbers.length).fill(null));
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [successMessage, setSuccessMessage] = useState<string>('');
+    const [drawDate, setDrawDate] = useState<Date | null>(null);
 
 
     function createNumberSet(low: number, high: number): Set<number> {
@@ -66,9 +70,9 @@ export default function LottoGamePage() {
             const sortedPicksArray = sortNumbersBySet(picksArray as number[], lottoStructure);
             const response = await isPickUnique(lottoGame, sortedPicksArray as number[]);
             if(response.data === true){
-                setSuccessMessage('These numbers have not been picked by anyone else in our Database!');
+                setSuccessMessage('😃 These numbers have NOT been picked by anyone else in our Database!');
             }else{
-                setErrorMessage('These numbers have already been picked by someone else!');
+                setErrorMessage('🤔 These numbers have already been picked by someone else!');
             }
         }
     }
@@ -84,9 +88,16 @@ export default function LottoGamePage() {
         }
         if(user.id && lottoGame && picksArray){
             const sortedPicksArray = sortNumbersBySet(picksArray as number[], lottoStructure);
-            const response = await saveLottoPick(user.id, lottoGame, sortedPicksArray as number[]);
+            const response = await saveLottoPick(user.id, lottoGame, sortedPicksArray as number[], drawDate);
             if(response.success){
                 setSuccessMessage('Pick saved successfully!');
+                setPicksArray(new Array(lottoStructure.numbers.length).fill(null));
+                const newSets = []
+
+                for(let i = 0; i < sets.length; i++){
+                    newSets.push(createNumberSet(...sets[i]));
+                }
+                setCurrentSets(newSets);
             }else{
                 setErrorMessage('Error saving pick, something went wrong with the server.  So sorry!');
             }
@@ -102,11 +113,11 @@ export default function LottoGamePage() {
             newSets.push(createNumberSet(...sets[i]));
         }
         setCurrentSets(newSets);
-        if(lottoGame && !localStorage.getItem(lottoGame)){
+        if(lottoGame && !customStorage.getItem(lottoGame)){
             const newPicksArray = new Array(lottoStructure.numbers.length).fill(null);
             setPicksArray(newPicksArray);
-        }else if(lottoGame && localStorage.getItem(lottoGame)){
-            const storedPicksArray = localStorage.getItem(lottoGame);
+        }else if(lottoGame && customStorage.getItem(lottoGame)){
+            const storedPicksArray = customStorage.getItem(lottoGame);
             const newPicksArray = storedPicksArray ?  JSON.parse(storedPicksArray) : new Array(lottoStructure.numbers.length).fill(null);
             console.log('picksArray from local storage', newPicksArray);
             setPicksArray(newPicksArray);
@@ -121,7 +132,10 @@ export default function LottoGamePage() {
             }
         }
         //create an array that is the length of lottoStructure.numbers and initialize all values to null
-        
+        if(lottoGame){
+            console.log('custom storage', customStorage.getItem(lottoGame));
+        }
+       
     }, [])
 
     useEffect(() => {
@@ -131,9 +145,13 @@ export default function LottoGamePage() {
     useEffect(() => {
         console.log('picksArray', picksArray);
         if(lottoGame){
-            localStorage.setItem(lottoGame, JSON.stringify(picksArray));
+            customStorage.setItem(lottoGame, JSON.stringify(picksArray));
         }
     }, [picksArray])
+
+    useEffect (() => {
+        console.log('drawDate', drawDate);
+    }, [drawDate])
 
 
 
@@ -152,7 +170,9 @@ export default function LottoGamePage() {
             </View>
             <Text style={{...styles.pickerHeader, ...styles.buttonHeader}}>Click a button to randomize</Text>
             <Text style={{...styles.pickerHeader, ...styles.inputHeader}}>...or manually enter a number</Text>
-            <View style={{visibility: !picksArray.includes(null) ? 'visible' : 'hidden'}}>
+            <Text>Choose Lotto Draw Date: </Text>
+            <DatePicker drawDate={drawDate} setDrawDate={setDrawDate} days={lottoStructure.days}/>
+            <View style={{visibility: !picksArray.includes(null) && drawDate ? 'visible' : 'hidden'}}>
                 <Pressable onPress={handleCheckUniquePick} style={styles.checkButton}>
                     <Text style={styles.checkButtonText}>Has anyone else picked these numbers?</Text>
                 </Pressable>
@@ -160,6 +180,7 @@ export default function LottoGamePage() {
                     <Text style={styles.saveButtonText}>Save</Text>
                 </Pressable>
             </View>
+            
         </View>
     )
 }

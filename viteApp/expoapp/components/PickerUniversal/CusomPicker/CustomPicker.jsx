@@ -7,20 +7,21 @@ const CustomDropdownPicker = ({
     onValueChange, 
     options, 
     style, 
-    labelStyle 
+    labelStyle ,
+    isPickerOpen,
+    setIsPickerOpen
 }) => {
-    const [isModalVisible, setModalVisible] = useState(false);
 
     const handleSelect = (item) => {
         onValueChange(item.value);
-        setModalVisible(false);
+        setIsPickerOpen(false);
     };
 
     return (
         <View style={styles.container}>
             {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
             <Pressable 
-                onPress={() => setModalVisible(true)} 
+                onPress={() => setIsPickerOpen(true)} 
                 style={[styles.touchable, style]}
             >
                 <Text style={styles.selectedValue}>
@@ -31,8 +32,8 @@ const CustomDropdownPicker = ({
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={isModalVisible}
-                onRequestClose={() => setModalVisible(false)}
+                visible={isPickerOpen}
+                onRequestClose={() => setIsPickerOpen(false)}
             >
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
@@ -45,7 +46,7 @@ const CustomDropdownPicker = ({
                                 </Pressable>
                             )}
                         />
-                        <Pressable onPress={() => setModalVisible(false)} style={styles.closeButton}>
+                        <Pressable onPress={() => setIsPickerOpen(false)} style={styles.closeButton}>
                             <Text style={styles.closeButtonText}>Close</Text>
                         </Pressable>
                     </View>

@@ -4,6 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import NavigateUniversal from '../components/NavigaveUniversal/NavigateUniversal';
 import UniversalLink from '../components/UniversalLink/UniversalLink';
 import LoadingScreen from '../components/LoadingScreen';
+import { globalStyles } from '../styles/globalStyles';
 
 const LoginPage = () => {
 
@@ -56,7 +57,7 @@ const LoginPage = () => {
     }
 
     const content = (
-        <View style={styles.container}>
+        <View style={styles.container} testID={'container'}>
             
             <Text style={styles.title}>Login</Text>
 
@@ -103,7 +104,8 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
-        
+        backgroundColor: globalStyles.mainBG.backgroundColor,
+        height: '100%'
     },
     title: {
         fontSize: 24,
@@ -114,9 +116,10 @@ const styles = {
         maxWidth: 400, // Set a max width for the input fields
         padding: 10,
         borderWidth: 1,
-        borderColor: '#ccc',
+        borderColor: 'black',
         marginBottom: 20,
         borderRadius: 5,
+        backgroundColor: 'white',
     },
     loginButton:{
         backgroundColor: '#007BFF',

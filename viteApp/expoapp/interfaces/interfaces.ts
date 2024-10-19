@@ -19,5 +19,6 @@ interface StructureNumber{
 export interface LottoStructure{
     title: string,
     numbers: StructureNumber[],
-    sets: ([number, number])[]
+    sets: ([number, number])[],
+    days: number[]
 }

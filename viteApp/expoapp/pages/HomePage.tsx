@@ -1,6 +1,6 @@
 // In your HomePage.js or HomePage.jsx
 
-import { View, Text, StyleSheet, Platform } from 'react-native-web'; 
+import { View, Text, Platform, TouchableWithoutFeedback } from 'react-native-web'; 
 import { useState, useEffect, useContext } from 'react';
 import CustomPicker from '../components/PickerUniversal/CusomPicker/CustomPicker';
 import UniversalLink from '../components/UniversalLink/UniversalLink';
@@ -18,6 +18,7 @@ const HomePage = () => {
 
     const [lottoGame, setLottoGame] = useState('');
     const [redirecting, setRedirecting] = useState(false);
+    const [isPickerOpen, setIsPickerOpen] = useState(false);
 
     useEffect(() => {
         console.log('lottoGame', lottoGame);
@@ -34,45 +35,39 @@ const HomePage = () => {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Welcome to the Home Pageff, {user?.username}!</Text>
-            <CustomPicker
-                label="Select your Lotto game"
-                selectedValue={lottoGame}
-                onValueChange={setLottoGame}
-                options={options}
-                style={{ borderColor: 'gray', borderWidth: 1 }} // Custom styles can be added
-            />
-            {/* {lottoGame && <UniversalLink href={isWeb ? `/lottoGame/${lottoGame}` : {
-                pathname: '/lottoGame/[lottoGame]',
-                params: { lottoGame: lottoGame }
-            }}>
-                <View style={styles.button}>
-                    <Text style={styles.buttonText}>Pick Some Numbers!</Text>
-                </View>
-            </UniversalLink>} */}
+        <TouchableWithoutFeedback style={styles.container} onPress={() => setIsPickerOpen(false)}>
+            <View style={styles.container}>
+                <Text style={styles.title}>Welcome, {user?.username}!</Text>
+                <CustomPicker
+                    label="Select your Lotto game"
+                    selectedValue={lottoGame}
+                    onValueChange={setLottoGame}
+                    options={options}
+                    style={{ borderColor: 'gray', borderWidth: 1 }} // 
+                    labelStyle={{ color: 'black' }}
+                    isPickerOpen={isPickerOpen}
+                    setIsPickerOpen={setIsPickerOpen}
+                />
 
-            {redirecting && <NavigateUniversal to={isWeb ? `/lottoGame/${lottoGame}` : {
-                pathname: '/lottoGame/[lottoGame]',
-                params: { lottoGame: lottoGame }
-            }}>
-                <View style={styles.button}>
-                    <Text style={styles.buttonText}>Pick Some Numbers!</Text>
-                </View>
-            </NavigateUniversal>}
 
-        </View>
+                {redirecting && <NavigateUniversal to={isWeb ? `/lottoGame/${lottoGame}` : {
+                    pathname: '/lottoGame/[lottoGame]',
+                    params: { lottoGame: lottoGame }
+                }}>
+
+                </NavigateUniversal>}
+
+            </View>
+        </TouchableWithoutFeedback>
 
     );
 };
 
-const styles = StyleSheet.create({
+const styles = ({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#f0f0f0',
         padding: 20,
-
         paddingTop: isWeb? '35vh' : '45%',
         backgroundColor: globalStyles.mainBG.backgroundColor,
         height: '100vh',

@@ -13,13 +13,13 @@ export const getLottoPicksByUserId = async (userId: string): Promise<LottoPicksR
     return data as LottoPicksResponse;
 };
 
-export const saveLottoPick = async (userId: string, gameName: string, numbers: number[]): Promise<LottoPicksResponse> => {
+export const saveLottoPick = async (userId: string, gameName: string, numbers: number[], drawDate: Date | null): Promise<LottoPicksResponse> => {
     const response = await fetch(`https://lotto-server-next.vercel.app/api/lottopicks/${userId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ gameName, numbers }),
+        body: JSON.stringify({ gameName, numbers, drawDate }),
     });
 
     if (!response.ok) {
