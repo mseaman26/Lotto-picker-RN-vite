@@ -179,10 +179,10 @@ export default function LottoGamePage() {
             <Text>Choose Lotto Draw Date: </Text>
             <DatePicker drawDate={drawDate} setDrawDate={setDrawDate} days={lottoStructure.days}/>
             <View style={{opacity: !picksArray.includes(null) && drawDate ? 1 : 0}}>
-                <Pressable onPress={handleCheckUniquePick} style={styles.checkButton}>
+                <Pressable onPress={!picksArray.includes(null) && drawDate ?handleCheckUniquePick : null} style={styles.checkButton}>
                     <Text style={styles.checkButtonText}>Has anyone else picked these numbers?</Text>
                 </Pressable>
-                <Pressable onPress={handleSavePick} style={styles.saveButton}>
+                <Pressable onPress={!picksArray.includes(null) && drawDate ?handleSavePick : null} style={styles.saveButton}>
                     <Text style={styles.saveButtonText}>Save</Text>
                 </Pressable>
             </View>
