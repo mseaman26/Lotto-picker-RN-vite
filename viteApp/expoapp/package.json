@@ -10,13 +10,15 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.23.1",
-    "@react-native-picker/picker": "^2.8.1",
+    "@react-native-community/datetimepicker": "8.0.1",
     "expo": "~51.0.28",
     "expo-constants": "~16.0.2",
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.23",
     "expo-status-bar": "~1.12.1",
-    "jwt-decode": "^4.0.0"
+    "i": "^0.3.7",
+    "jwt-decode": "^4.0.0",
+    "npm": "^10.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

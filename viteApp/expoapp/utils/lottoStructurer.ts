@@ -54,3 +54,14 @@ export const lottoStructurer = (lotto: string) => {
 
     return structure
 }
+
+export const weekdaysString = (days: number[]) => {
+    let weekdays = ''
+    for(let i = 0; i < days.length; i++){
+        weekdays += days[i] === 7 ? 'Sunday, ' : days[i] === 1 ? 'Monday, ' : days[i] === 2 ? 'Tuesday, ' : days[i] === 3 ? 'Wednesday, ' : days[i] === 4 ? 'Thursday, ' : days[i] === 5 ? 'Friday, ' : 'Saturday, '
+        if(i !== days.length - 1){
+            weekdays += 'or '
+        }
+    }
+    return weekdays
+}

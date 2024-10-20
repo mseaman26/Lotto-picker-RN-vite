@@ -1,7 +1,7 @@
 
 
 
-import { Text, View, Platform, Pressable } from 'react-native-web';
+import { Text, View, Platform, Pressable, TouchableWithoutFeedback, Keyboard } from 'react-native-web';
 import { getUrlParams } from '../hooks/getParams';
 import { lottoStructurer } from '../utils/lottoStructurer';
 import LottoNumber from '../components/LottoNumber';
@@ -20,11 +20,9 @@ export default function LottoGamePage() {
 
     const { user } = useContext(AuthContext);
     const { lottoGame } = getUrlParams();
-    console.log('lottoGame', lottoGame);
 
     const lottoStructure = lottoStructurer(lottoGame || '');
     const sets = lottoStructure.sets;   
-    console.log('lottoStructure', lottoStructure);
 
     const [currentSets, setCurrentSets] = useState<Set<number>[]>([]);
     const [picksArray, setPicksArray] = useState<(number | null)[]>(Array(lottoStructure.numbers.length).fill(null));
@@ -68,11 +66,11 @@ export default function LottoGamePage() {
         }
         if(lottoGame && picksArray){
             const sortedPicksArray = sortNumbersBySet(picksArray as number[], lottoStructure);
-            const response = await isPickUnique(lottoGame, sortedPicksArray as number[]);
+            const response = await isPickUnique(lottoGame, sortedPicksArray as number[], drawDate);
             if(response.data === true){
-                setSuccessMessage('😃 These numbers have NOT been picked by anyone else in our Database!');
+                setSuccessMessage('😃 These numbers have NOT been picked for this draw date by anyone else!');
             }else{
-                setErrorMessage('🤔 These numbers have already been picked by someone else!');
+                setErrorMessage('🤔 These numbers have already been picked for this draw date by someone else!');
             }
         }
     }
@@ -98,6 +96,7 @@ export default function LottoGamePage() {
                     newSets.push(createNumberSet(...sets[i]));
                 }
                 setCurrentSets(newSets);
+                setDrawDate(null);
             }else{
                 setErrorMessage('Error saving pick, something went wrong with the server.  So sorry!');
             }
@@ -151,15 +150,18 @@ export default function LottoGamePage() {
         if(lottoGame){
             customStorage.setItem(lottoGame, JSON.stringify(picksArray));
         }
+
     }, [picksArray])
 
     useEffect (() => {
         console.log('drawDate', drawDate);
     }, [drawDate])
+    useEffect(() => {
+        console.log('errorMessage', errorMessage);
+        console.log('successMessage', successMessage);
+    }, [errorMessage, successMessage])
 
-
-
-    return (
+    const content = (
         <View style={styles.container}>
             <View style={styles.errorMessageContainer}>
                 <Text style={styles.errorMessage}>{errorMessage}</Text>
@@ -169,14 +171,14 @@ export default function LottoGamePage() {
             <Text style={styles.header}>{lottoStructure.title}</Text>
             <View style={styles.numbersSection}>
                 {lottoStructure.numbers.map((number, index) => (
-                    <LottoNumber key={`lottoNumber_${index}`} value={picksArray !== null ? picksArray[index] : null} color={number.color} currentSet={currentSets[number.setIndex]} setIndex={number.setIndex} index={index} setCurrentSets={setCurrentSets} picksArray={picksArray} setPicksArray={setPicksArray} setErrorMessage={setErrorMessage}/>
+                    <LottoNumber key={`lottoNumber_${index}`} value={picksArray !== null ? picksArray[index] : null} color={number.color} currentSet={currentSets[number.setIndex]} setIndex={number.setIndex} index={index} setCurrentSets={setCurrentSets} picksArray={picksArray} setPicksArray={setPicksArray} setErrorMessage={setErrorMessage} setSuccessMessage={setSuccessMessage}/>
                 ))}
             </View>
             <Text style={{...styles.pickerHeader, ...styles.buttonHeader}}>Click a button to randomize</Text>
             <Text style={{...styles.pickerHeader, ...styles.inputHeader}}>...or manually enter a number</Text>
             <Text>Choose Lotto Draw Date: </Text>
             <DatePicker drawDate={drawDate} setDrawDate={setDrawDate} days={lottoStructure.days}/>
-            <View style={{visibility: !picksArray.includes(null) && drawDate ? 'visible' : 'hidden'}}>
+            <View style={{opacity: !picksArray.includes(null) && drawDate ? 1 : 0}}>
                 <Pressable onPress={handleCheckUniquePick} style={styles.checkButton}>
                     <Text style={styles.checkButtonText}>Has anyone else picked these numbers?</Text>
                 </Pressable>
@@ -186,6 +188,16 @@ export default function LottoGamePage() {
             </View>
             
         </View>
+    )
+
+    return (
+        <>
+        {isWeb ? content : (
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                {content}
+            </TouchableWithoutFeedback>
+        )}
+        </>
     )
 }
 

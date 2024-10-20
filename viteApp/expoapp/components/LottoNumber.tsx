@@ -3,6 +3,7 @@ import { View, Text, Platform, Pressable, TextInput } from "react-native-web";
 import React, { useState, useEffect, useRef } from "react";
 const isWeb = Platform.OS === 'web';
 import type { LottoSet } from "../utils/lottoStructurer";
+import { set } from "react-datepicker/dist/date_utils";
 
 interface LottoNumberProps {
     value: number | null;
@@ -14,8 +15,9 @@ interface LottoNumberProps {
     picksArray: (number | null)[];
     setPicksArray: any;
     setErrorMessage: any;
+    setSuccessMessage: any;
 }
-export default function LottoNumber({ value = null, color, currentSet, setIndex, setCurrentSets, index, picksArray, setPicksArray, setErrorMessage }: LottoNumberProps) {
+export default function LottoNumber({ value = null, color, currentSet, setIndex, setCurrentSets, index, picksArray, setPicksArray, setErrorMessage, setSuccessMessage }: LottoNumberProps) {
     const [manualInput, setManualInput] = useState<string>('');
     const [number, setNumber] = useState<number | null>(value);
     const [isSpinning, setIsSpinning] = useState<boolean>(false);
@@ -23,6 +25,8 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
     const spinIntervalRef = useRef<any>(null); 
 
     const handleSpinButton = (): void => {
+        setErrorMessage('');
+        setSuccessMessage('');
         console.log('set index', setIndex);
         if (isSpinning) {
             setIsSpinning(false);
@@ -57,6 +61,7 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
 
     const handleManualInput = (input: string): void => {
         setErrorMessage('');
+        setSuccessMessage('');
         let numericalInput = parseInt(input, 10);
         setManualInput(input);
         if(number !== null){

@@ -36,13 +36,13 @@ interface IsUniqueResponse {
     data: boolean;
 }
 
-export const isPickUnique = async (gameName: string, numbers: number[]): Promise<IsUniqueResponse> => {
+export const isPickUnique = async (gameName: string, numbers: number[], drawDate: Date | null): Promise<IsUniqueResponse> => {
     const response = await fetch(`https://lotto-server-next.vercel.app/api/lottopicks/isunique`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ gameName, numbers }),
+        body: JSON.stringify({ gameName, numbers, drawDate }),
     });
 
     if (!response.ok) {
