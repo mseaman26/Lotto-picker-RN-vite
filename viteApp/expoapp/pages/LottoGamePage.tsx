@@ -77,6 +77,11 @@ export default function LottoGamePage() {
     const handleGenerateUniquePick = async () => {
         setErrorMessage('');
         setSuccessMessage('');
+        console.log('>??')
+        if(!drawDate){
+            alert('Please choose a draw date');
+            return
+        }
         if(lottoGame){
             const response = await generateUniqe(lottoGame, drawDate);
             if(response.success){
@@ -85,7 +90,8 @@ export default function LottoGamePage() {
                     newPicksArray[i] = response.data[i];
                 }
                 setPicksArray(newPicksArray);
-                setSuccessMessage(`Unique numbers generated after ${response.tries} tries!`);
+                setSuccessMessage(`Unique Numbers Generated!`);
+                alert(`Unique Numbers Generated!`)
             }else{
                 setErrorMessage('Error generating unique numbers, something went wrong with the server.  So sorry!');
             }
@@ -196,18 +202,20 @@ export default function LottoGamePage() {
             <Text style={{...styles.pickerHeader, ...styles.inputHeader}}>...or manually enter a number</Text>
             <Text>Choose Lotto Draw Date: </Text>
             <DatePicker drawDate={drawDate} setDrawDate={setDrawDate} days={lottoStructure.days}/>
-            <View style={{opacity: !picksArray.includes(null) && drawDate ? 1 : 0}}>
-                <Pressable onPress={!picksArray.includes(null) && drawDate ?handleCheckUniquePick : null} style={{...styles.button, ...styles.checkButton}}>
-                    <Text style={styles.checkButtonText}>Has anyone else picked these numbers?</Text>
-                </Pressable>
-                <Pressable onPress={!picksArray.includes(null) && drawDate ?handleGenerateUniquePick : null} style={{...styles.button, ...styles.generateUniqueButton}}>
+            <View>
+                <Pressable onPress={handleGenerateUniquePick} style={{...styles.button, ...styles.generateUniqueButton}}>
                     <Text style={styles.checkButtonText}>Generate Unique Numbers for Me</Text>
                 </Pressable>
-                <Pressable onPress={!picksArray.includes(null) && drawDate ?handleSavePick : null} style={{...styles.button, ...styles.saveButton}}>
-                    <Text style={styles.saveButtonText}>Save</Text>
-                </Pressable>
+                <View style={{opacity: !picksArray.includes(null) && drawDate ? 1 : 0}}>
+                    <Pressable onPress={!picksArray.includes(null) && drawDate ?handleCheckUniquePick : null} style={{...styles.button, ...styles.checkButton}}>
+                        <Text style={styles.checkButtonText}>Has anyone else picked these numbers?</Text>
+                    </Pressable>
+                    
+                    <Pressable onPress={!picksArray.includes(null) && drawDate ?handleSavePick : null} style={{...styles.button, ...styles.saveButton}}>
+                        <Text style={styles.saveButtonText}>Save</Text>
+                    </Pressable>
+                </View>
             </View>
-            
         </View>
     )
 

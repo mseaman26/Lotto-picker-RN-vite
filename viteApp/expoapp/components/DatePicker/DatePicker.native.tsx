@@ -31,6 +31,7 @@ interface DatePickerProps {
             } else {
                 // If the date is invalid, show an error message or handle the error
                 alert(`Please select a ${weekdaysString(days)} that is today or later.`);
+                setDrawDate(new Date());  // Reset the date
             }
         }
         // setShow(false); // Close the date picker after interaction
@@ -45,21 +46,25 @@ interface DatePickerProps {
         <>
         <View style={styles.container}>
             
-            <View>
+            
                 {!show &&
                 <Pressable style={styles.button} onPress={showDatepicker}>
                     <Text>Choose Date</Text>
                 </Pressable>}
-                <Text>{show ? 'press to change' : ''}</Text>
+                
+                <View style={styles.row}>
+                    {show && (
+                        <>
+                        <DateTimePicker
+                        value={drawDate || new Date()}
+                        mode="date"
+                        display="default"
+                        onChange={onChange}
+                        />
+                        <Text style={{margin: 5}}>{show ? 'press to change' : ''}</Text>
+                        </>
+                    )}
             </View>
-            {show && (
-                <DateTimePicker
-                value={drawDate || new Date()}
-                mode="date"
-                display="default"
-                onChange={onChange}
-                />
-            )}
         </View>
         </>
     )
@@ -77,5 +82,12 @@ const styles = StyleSheet.create({
         padding: 10,
         margin: 10,
         borderRadius: 5
-    }
+    },
+    row: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center', // Align items in the center vertically
+        justifyContent: 'center', // Align items in the center horizontally
+    },
+
 });
