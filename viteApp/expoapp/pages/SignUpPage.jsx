@@ -10,9 +10,9 @@ const SignupPage = () => {
     const isWeb = Platform.OS === 'web';
 
     const { user, signup, error, setError, loading } = useContext(AuthContext);
-    const [email, setEmail] = useState('c@a.com');
-    const [username, setUsername] = useState('c');
-    const [password, setPassword] = useState('!Q2w3e4r');
+    const [email, setEmail] = useState(import.meta.env.MODE === 'production' ? '' : 'c@a.com');
+    const [username, setUsername] = useState(import.meta.env.MODE === 'production' ? '' : 'c');
+    const [password, setPassword] = useState(import.meta.env.MODE === 'production' ? '' : '!Q2w3e4r');
     const [redirect, setRedirect] = useState(false);
 
     const handleEmailChange = (email) => {
