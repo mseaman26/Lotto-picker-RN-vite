@@ -11,8 +11,8 @@ const LoginPage = () => {
     const isWeb = Platform.OS === 'web';
 
     const { user, login, error, setError, loading } = useContext(AuthContext);
-    const [email, setEmail] = useState('c@a.com');
-    const [password, setPassword] = useState('!Q2w3e4r');
+    const [email, setEmail] = useState(import.meta.env.VITE_API_URL === 'production' ? '' : 'c@a.com');
+    const [password, setPassword] = useState(import.meta.env.VITE_API_URL === 'production' ? '' : '!Q2w3e4r');
 
     const handleEmailChang = (email) => {
         setError(' ');
