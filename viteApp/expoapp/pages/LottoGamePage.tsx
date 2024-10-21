@@ -7,7 +7,7 @@ import { lottoStructurer } from '../utils/lottoStructurer';
 import LottoNumber from '../components/LottoNumber';
 import {globalStyles} from '../styles/globalStyles';
 import { useState, useEffect, useContext } from 'react';
-import { saveLottoPick, isPickUnique } from '../utils/apiHelpers';
+import { saveLottoPick, isPickUnique, generateUniqe } from '../utils/apiHelpers';
 import { AuthContext } from '../context/AuthContext';
 import type { LottoStructure } from '../interfaces/interfaces';
 import DatePicker from '../components/DatePicker/DatePicker';
@@ -73,6 +73,24 @@ export default function LottoGamePage() {
                 setErrorMessage('🤔 These numbers have already been picked for this draw date by someone else!');
             }
         }
+    }
+    const handleGenerateUniquePick = async () => {
+        setErrorMessage('');
+        setSuccessMessage('');
+        if(lottoGame){
+            const response = await generateUniqe(lottoGame, drawDate);
+            if(response.success){
+                const newPicksArray = new Array(lottoStructure.numbers.length).fill(null);
+                for(let i = 0; i < response.data.length; i++){
+                    newPicksArray[i] = response.data[i];
+                }
+                setPicksArray(newPicksArray);
+                setSuccessMessage(`Unique numbers generated after ${response.tries} tries!`);
+            }else{
+                setErrorMessage('Error generating unique numbers, something went wrong with the server.  So sorry!');
+            }
+        }
+
     }
 
     const handleSavePick = async () => {
@@ -179,10 +197,13 @@ export default function LottoGamePage() {
             <Text>Choose Lotto Draw Date: </Text>
             <DatePicker drawDate={drawDate} setDrawDate={setDrawDate} days={lottoStructure.days}/>
             <View style={{opacity: !picksArray.includes(null) && drawDate ? 1 : 0}}>
-                <Pressable onPress={!picksArray.includes(null) && drawDate ?handleCheckUniquePick : null} style={styles.checkButton}>
+                <Pressable onPress={!picksArray.includes(null) && drawDate ?handleCheckUniquePick : null} style={{...styles.button, ...styles.checkButton}}>
                     <Text style={styles.checkButtonText}>Has anyone else picked these numbers?</Text>
                 </Pressable>
-                <Pressable onPress={!picksArray.includes(null) && drawDate ?handleSavePick : null} style={styles.saveButton}>
+                <Pressable onPress={!picksArray.includes(null) && drawDate ?handleGenerateUniquePick : null} style={{...styles.button, ...styles.generateUniqueButton}}>
+                    <Text style={styles.checkButtonText}>Generate Unique Numbers for Me</Text>
+                </Pressable>
+                <Pressable onPress={!picksArray.includes(null) && drawDate ?handleSavePick : null} style={{...styles.button, ...styles.saveButton}}>
                     <Text style={styles.saveButtonText}>Save</Text>
                 </Pressable>
             </View>
@@ -254,25 +275,14 @@ const styles = {
     },
     saveButton: {
         backgroundColor: '#4CAF50', // Green background
-        paddingVertical: 12, // Vertical padding for the button
-        paddingHorizontal: 24, // Horizontal padding for the button
-        borderRadius: 8, // Rounded corners
-        marginTop: 20, // Add some space above the button
-        alignItems: 'center', // Center text horizontally
-        justifyContent: 'center', // Center text vertically
-        shadowColor: '#000', // Shadow effect for better visibility
-        shadowOffset: { width: 0, height: 2 }, // Offset for the shadow
-        shadowOpacity: 0.3, // Shadow transparency
-        shadowRadius: 3.84, // Blur radius for shadow
-        elevation: 5, // For Android shadow support
+      
     },
     saveButtonText: {
         color: '#fff', // White text color
         fontSize: 18, // Text size
         fontWeight: 'bold', // Bold text
     },
-    checkButton: {
-        backgroundColor: '#FFA500', // Orange background for the Check button
+    button:{
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 8,
@@ -284,6 +294,12 @@ const styles = {
         shadowOpacity: 0.3,
         shadowRadius: 3.84,
         elevation: 5,
+    },
+    checkButton: {
+        backgroundColor: '#FFA500', // Orange background for the Check button
+    },
+    generateUniqueButton: {
+        backgroundColor: globalStyles.primaryBlue,
     },
     checkButtonText: {
         color: '#fff',
