@@ -49,10 +49,13 @@ const LoginPage = () => {
         setError(' '); // Reset error message when the component mounts
         if(isWeb){
             //check the .env file to see if we are in production
-            setIsProduction(process.env.NODE_ENV === 'production');
-            console.log('isProduction:', isProduction);
+            if(process.env.NODE_ENV === 'production'){
+                setEmail('');
+                setPassword('');
+            }
+
         }else{
-            
+            //TODO: handle expo logic here for checking if we are in production
         }
     }, []);
 
