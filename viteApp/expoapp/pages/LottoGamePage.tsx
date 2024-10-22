@@ -128,6 +128,12 @@ export default function LottoGamePage() {
         
 
     }
+    const handleClear = () => {
+        setPicksArray(new Array(lottoStructure.numbers.length).fill(null));
+        setErrorMessage('');
+        setSuccessMessage('');
+        setDrawDate(null);
+    }
 
     useEffect(() => {
         const initializeData = async () => {
@@ -200,6 +206,9 @@ export default function LottoGamePage() {
             </View>
             <Text style={{...styles.pickerHeader, ...styles.buttonHeader}}>Click a button to randomize</Text>
             <Text style={{...styles.pickerHeader, ...styles.inputHeader}}>...or manually enter a number</Text>
+            <Pressable testId={'clearButton'} onPress={handleClear}  style={{...styles.button, ...styles.clearButton}}>
+                <Text style={styles.clearButtonText}>Clear</Text>
+            </Pressable>
             <Text>Choose Lotto Draw Date: </Text>
             <DatePicker drawDate={drawDate} setDrawDate={setDrawDate} days={lottoStructure.days}/>
             <View>
@@ -251,6 +260,22 @@ const styles = {
         maxWidth: 500,
         width: '100%',
 
+    },
+    clearButton:{
+        width: 30,
+        height: 30,
+        borderRadius: '50%',
+        marginTop: 0,
+        paddingVertical: 0,
+        paddingHorizontal: 0,
+        backgroundColor: 'red',
+    },
+    clearButtonText:{
+        fontSize: 8,
+        textAlign: 'center',
+        padding: 0,
+        color: 'white',
+      
     },
     pickerHeader: {
         fontSize: 15,

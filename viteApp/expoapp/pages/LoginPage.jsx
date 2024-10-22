@@ -10,9 +10,11 @@ const LoginPage = () => {
 
     const isWeb = Platform.OS === 'web';
 
+    const [isProduction, setIsProduction] = useState(false);
     const { user, login, error, setError, loading } = useContext(AuthContext);
-    const [email, setEmail] = useState(import.meta.env.MODE === 'production' ? '' : 'c@a.com');
-    const [password, setPassword] = useState(import.meta.env.MODE === 'production' ? '' : '!Q2w3e4r');
+    const [email, setEmail] = useState(isProduction ? '' : 'c@a.com');
+    const [password, setPassword] = useState(isProduction ? '' : '!Q2w3e4r');
+    
 
     const handleEmailChang = (email) => {
         setError(' ');
@@ -45,7 +47,18 @@ const LoginPage = () => {
 
     useEffect(() => {
         setError(' '); // Reset error message when the component mounts
+        if(isWeb){
+            //check the .env file to see if we are in production
+            setIsProduction(process.env.NODE_ENV === 'production');
+            console.log('isProduction:', isProduction);
+        }else{
+            
+        }
     }, []);
+
+    useEffect(() => {
+        console.log('isProduction:', isProduction);
+    }, [isProduction]);
 
     useEffect(() => {
         console.log('loading:', loading);

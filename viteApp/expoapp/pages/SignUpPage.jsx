@@ -80,7 +80,7 @@ const SignupPage = () => {
 
             <Button title="Sign Up" onPress={handleSignUp} />
             <Text style={styles.error}>{error}</Text>
-            <Text>Already have an account? <UniversalLink href={isWeb ? '/login' : 'LoginPage'}>Login</UniversalLink></Text>
+            <Text>Already have an account?<UniversalLink href={isWeb ? '/login' : 'LoginPage'}>Login</UniversalLink></Text>
         </View>
     )
 
