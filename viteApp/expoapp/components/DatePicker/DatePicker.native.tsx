@@ -1,6 +1,6 @@
 import { Pressable, View, Text, StyleSheet } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {weekdaysString} from '../../utils/lottoStructurer';
 
 interface DatePickerProps {
@@ -42,6 +42,12 @@ interface DatePickerProps {
         setShow(true);
     };
 
+    useEffect(() => {
+        if (drawDate === null) {
+            setShow(false);
+        }
+    }, [drawDate]);
+
     return (
         <>
         <View style={styles.container}>
@@ -52,19 +58,19 @@ interface DatePickerProps {
                     <Text>Choose Date</Text>
                 </Pressable>}
                 
-                <View style={styles.row}>
+                
                     {show && (
-                        <>
-                        <DateTimePicker
-                        value={drawDate || new Date()}
-                        mode="date"
-                        display="default"
-                        onChange={onChange}
-                        />
-                        <Text style={{margin: 5}}>{show ? 'press to change' : ''}</Text>
-                        </>
+                        <View style={styles.pickerContainer}>
+                            <DateTimePicker
+                            value={drawDate || new Date()}
+                            mode="date"
+                            display="calendar"
+                            onChange={onChange}
+                            />
+                            <Text style={{textAlign: 'center'}} >{show ? '(press to change)' : ''}</Text>
+                        </View>
                     )}
-            </View>
+           
         </View>
         </>
     )
@@ -76,12 +82,17 @@ export default DatePickerExpo;
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
+         
     },
     button: {
         backgroundColor: 'lightblue',
         padding: 10,
         margin: 10,
         borderRadius: 5
+    },
+    pickerContainer: {
+        alignItems: 'center',
+        paddingRight: 10,
     },
     row: {
         width: '100%',

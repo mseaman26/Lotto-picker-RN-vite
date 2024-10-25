@@ -49,9 +49,9 @@ const LoginPage = () => {
         setError(' '); // Reset error message when the component mounts
         if(isWeb){
             //check the .env file to see if we are in production
-            if(process.env.NODE_ENV === 'production'){
-                setEmail('');
-                setPassword('');
+            if(process.env.NODE_ENV !== 'production'){
+                setEmail('c@a.com');
+                setPassword('!Q2w3e4r');
             }
 
         }else{

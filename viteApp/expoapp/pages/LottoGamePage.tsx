@@ -12,6 +12,7 @@ import { AuthContext } from '../context/AuthContext';
 import type { LottoStructure } from '../interfaces/interfaces';
 import DatePicker from '../components/DatePicker/DatePicker';
 import {customStorage} from '../utils/customStorage/customStorage';
+import Toast from '../components/Toast/Toast'
 
 
 const isWeb = Platform.OS === 'web';
@@ -29,6 +30,10 @@ export default function LottoGamePage() {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [successMessage, setSuccessMessage] = useState<string>('');
     const [drawDate, setDrawDate] = useState<Date | null>(null);
+    const [toastVisible, setToastVisible] = useState<boolean>(false);
+    const [toastMessage, setToastMessage] = useState<string>('test');
+    const [toastType, setToastType] = useState<'default' | 'success' | 'error' | 'warning'>('success');
+    const [toastPosition, setToastPosition] = useState<'top' | 'bottom' | 'center'>('center');
 
 
     function createNumberSet(low: number, high: number): Set<number> {
@@ -79,7 +84,11 @@ export default function LottoGamePage() {
         setSuccessMessage('');
         console.log('>??')
         if(!drawDate){
-            alert('Please choose a draw date');
+            setToastMessage('Please choose a draw date');
+            setToastType('error');
+            setToastPosition('center');
+            setToastVisible(true);
+            // alert('Please choose a draw date');
             return
         }
         if(lottoGame){
@@ -90,8 +99,11 @@ export default function LottoGamePage() {
                     newPicksArray[i] = response.data[i];
                 }
                 setPicksArray(newPicksArray);
-                setSuccessMessage(`Unique Numbers Generated!`);
-                alert(`Unique Numbers Generated!`)
+                setToastMessage(`Unique Numbers Generated!`);
+                setToastType('success');
+                setToastPosition('center');
+                setToastVisible(true);
+
             }else{
                 setErrorMessage('Error generating unique numbers, something went wrong with the server.  So sorry!');
             }
@@ -134,6 +146,7 @@ export default function LottoGamePage() {
         setSuccessMessage('');
         setDrawDate(null);
     }
+
 
     useEffect(() => {
         const initializeData = async () => {
@@ -182,14 +195,9 @@ export default function LottoGamePage() {
         }
 
     }, [picksArray])
-
-    useEffect (() => {
-        console.log('drawDate', drawDate);
-    }, [drawDate])
     useEffect(() => {
-        console.log('errorMessage', errorMessage);
-        console.log('successMessage', successMessage);
-    }, [errorMessage, successMessage])
+        console.log('istoaastvisible', toastVisible);
+    }, [toastVisible])
 
     const content = (
         <View style={styles.container}>
@@ -197,6 +205,7 @@ export default function LottoGamePage() {
                 <Text style={styles.errorMessage}>{errorMessage}</Text>
                 <Text style={styles.successMessage}>{successMessage}</Text>
             </View>
+            <Toast visible={toastVisible} message={toastMessage} type={toastType} position={toastPosition} onClose={() => setToastVisible(false)}/>
             
             <Text style={styles.header}>{lottoStructure.title}</Text>
             <View style={styles.numbersSection}>
@@ -206,10 +215,10 @@ export default function LottoGamePage() {
             </View>
             <Text style={{...styles.pickerHeader, ...styles.buttonHeader}}>Click a button to randomize</Text>
             <Text style={{...styles.pickerHeader, ...styles.inputHeader}}>...or manually enter a number</Text>
-            <Pressable testId={'clearButton'} onPress={handleClear}  style={{...styles.button, ...styles.clearButton}}>
-                <Text style={styles.clearButtonText}>Clear</Text>
+            <Pressable testId={'clearButton'} onPress={handleClear}  style={{...styles.button, ...styles.clearButton, marginBottom: 5}}>
+                <Text style={styles.clearButtonText}>Clear All Numbers</Text>
             </Pressable>
-            <Text>Choose Lotto Draw Date: </Text>
+            <Text style={{marginBottom: 5}}>Choose Lotto Draw Date: </Text>
             <DatePicker drawDate={drawDate} setDrawDate={setDrawDate} days={lottoStructure.days}/>
             <View>
                 <Pressable onPress={handleGenerateUniquePick} style={{...styles.button, ...styles.generateUniqueButton}}>
@@ -262,16 +271,13 @@ const styles = {
 
     },
     clearButton:{
-        width: 30,
-        height: 30,
-        borderRadius: '50%',
+
         marginTop: 0,
-        paddingVertical: 0,
-        paddingHorizontal: 0,
         backgroundColor: 'red',
+        marginbottom: 20,
     },
     clearButtonText:{
-        fontSize: 8,
+        fontSize: 14,
         textAlign: 'center',
         padding: 0,
         color: 'white',

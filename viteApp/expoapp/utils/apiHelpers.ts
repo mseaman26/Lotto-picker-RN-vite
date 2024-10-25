@@ -1,9 +1,27 @@
 import { LottoPicksResponse } from "../interfaces/interfaces";
+import { Platform } from "react-native-web";
 
-const baseURL = 'https://lotto-server-next.vercel.app/api';
+const isweb = Platform.OS === 'web';
+
+const nodeEnv = process.env.NODE_ENV;
+
+let baseURL = '';
+if (nodeEnv === 'development') {
+    baseURL = 'http://localhost:5173/api';
+}else{
+    baseURL = 'https://lotto-server-next.vercel.app/api';
+}
+
+if(!isweb){
+    baseURL = 'https://lotto-server-next.vercel.app/api'
+}
+
+
+// const baseURL = 'https://lotto-server-next.vercel.app/api';
 
 
 export const getLottoPicksByUserId = async (userId: string): Promise<LottoPicksResponse> => {
+    
     const response = await fetch(`${baseURL}/lottopicks/${userId}`);
 
     if (!response.ok) {
@@ -63,6 +81,7 @@ interface GenerateUniqueResponse {
 }
 
 export const generateUniqe = async (gameName: string, drawDate: Date | null): Promise<GenerateUniqueResponse> => {
+    console.log('baseURL:', baseURL);
     const response = await fetch(`${baseURL}/lottopicks/generateunique`, {
         method: 'POST',
         headers: {

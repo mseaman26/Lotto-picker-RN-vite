@@ -38,9 +38,10 @@ const ProfilePage = () => {
 
 
     return (
+      <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
           <Text style={styles.name}>{user.username}'s picks</Text>
-          <ScrollView style={styles.scrollView}>
+          
             {myPicks && myPicks.map((pick, index) => {
               const date = new Date(pick.createdAt);
               const formattedDate = date.toLocaleDateString('en-US', {
@@ -71,8 +72,9 @@ const ProfilePage = () => {
                 </View>
               )
             })}
-          </ScrollView>
+       
         </View>
+      </ScrollView>
     );
 };
 

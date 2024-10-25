@@ -1,9 +1,7 @@
 
 import { View, Text, Platform, Pressable, TextInput } from "react-native-web";
 import React, { useState, useEffect, useRef } from "react";
-const isWeb = Platform.OS === 'web';
-import type { LottoSet } from "../utils/lottoStructurer";
-import { set } from "react-datepicker/dist/date_utils";
+
 
 interface LottoNumberProps {
     value: number | null;
@@ -71,7 +69,8 @@ export default function LottoNumber({ value = null, color, currentSet, setIndex,
                 return newSets;
             })
         }
-        if(isNaN(numericalInput)){
+        if(isNaN(numericalInput) && input !== ''){
+            setErrorMessage('Only numbers within range are allowed');
             setNumber(null); 
             setPicksArray((previous: (number | null)[]): (number | null)[] => {
                 const newPicksArray = [...previous];
