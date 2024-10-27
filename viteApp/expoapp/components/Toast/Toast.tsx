@@ -1,6 +1,6 @@
 // Toast.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, Animated, StyleSheet, Dimensions, Platform } from 'react-native-web';
+import { Text, Animated, StyleSheet, Dimensions, Platform, TouchableWithoutFeedback, Pressable } from 'react-native-web';
 
 const isWeb = Platform.OS === 'web';
 
@@ -11,15 +11,17 @@ interface ToastProps {
   onClose?: () => void;
   type?: 'default' | 'success' | 'error' | 'warning';
   position?: 'top' | 'bottom' | 'center';
+  setToastVisible?: any;
 }
 
 const Toast: React.FC<ToastProps> = ({
   message,
   visible,
-  duration = 3000,
+  duration = 300000,
   onClose,
   type = 'default',
   position = 'bottom',
+  setToastVisible,
 }) => {
   const [fadeAnim] = useState(new Animated.Value(0)); // Animation for fade in/out
   const { height } = Dimensions.get('window'); // Get window height for positioning
@@ -86,27 +88,41 @@ const Toast: React.FC<ToastProps> = ({
   };
 
   return (
-    <Animated.View
-      style={[
-        styles.toastContainer,
-        getPositionStyle(),
-        { backgroundColor: getBackgroundColor(), opacity: fadeAnim },
-      ]}
-    >
-      <Text style={styles.toastText}>{message}</Text>
-    </Animated.View>
+    <Pressable style={styles.wrapper} onPress={handleClose}>
+      <Animated.View
+        style={[
+          styles.toastContainer,
+          getPositionStyle(),
+          { backgroundColor: getBackgroundColor(), opacity: fadeAnim },
+        ]}
+      >
+        <Text style={styles.toastText}>{message}</Text>
+        <Pressable onPress={handleClose} style={styles.closeButton}>
+          <Text style={styles.toastText}>X</Text>
+        </Pressable>
+      </Animated.View>
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
+  wrapper: {
+    position: 'absolute',
+    width: '90%',
+    height: '100%',
+    zIndex: 9999,
+    cursor: 'pointer',
+    margin: 10,
+  },
   toastContainer: {
     position: 'absolute',
     padding: 10,
     borderRadius: 10,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 9999,
-    height: '20%',
+    height: 50,
     maxWidth: 900,
     width: '100%',
     left: isWeb ? '50%' : 'auto',
@@ -116,6 +132,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
   },
+  closeButton: {
+    position: 'absolute',
+    right: 20,
+  }
 });
 
 export default Toast;

@@ -73,9 +73,16 @@ export default function LottoGamePage() {
             const sortedPicksArray = sortNumbersBySet(picksArray as number[], lottoStructure);
             const response = await isPickUnique(lottoGame, sortedPicksArray as number[], drawDate);
             if(response.data === true){
-                setSuccessMessage('😃 These numbers have NOT been picked for this draw date by anyone else!');
+                setToastMessage('😃 These numbers have NOT been picked for this draw date by anyone else!');
+                setToastType('success');
+                setToastPosition('center');
+                setToastVisible(true);
             }else{
-                setErrorMessage('🤔 These numbers have already been picked for this draw date by someone else!');
+                setToastMessage('🤔 These numbers have already been picked for this draw date by someone else!');
+                setToastType('error');
+                setToastPosition('center');
+                setToastVisible(true);
+                
             }
         }
     }
@@ -201,11 +208,14 @@ export default function LottoGamePage() {
 
     const content = (
         <View style={styles.container}>
+            {toastVisible && <TouchableWithoutFeedback onPress={() => setToastVisible(false)}>
+                <View style={styles.toastOverlay}></View>
+            </TouchableWithoutFeedback>}
             <View style={styles.errorMessageContainer}>
                 <Text style={styles.errorMessage}>{errorMessage}</Text>
                 <Text style={styles.successMessage}>{successMessage}</Text>
             </View>
-            <Toast visible={toastVisible} message={toastMessage} type={toastType} position={toastPosition} onClose={() => setToastVisible(false)}/>
+            <Toast visible={toastVisible} message={toastMessage} type={toastType} position={toastPosition} onClose={() => setToastVisible(false)} setToastVisible={setToastVisible}/>
             
             <Text style={styles.header}>{lottoStructure.title}</Text>
             <View style={styles.numbersSection}>
@@ -256,6 +266,13 @@ const styles = {
         alignItems: 'center',
         backgroundColor: globalStyles.mainBG.backgroundColor,
         minHeight: '100vh',
+    },
+    toastOverlay: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: 2,
     },
     header: {
         fontSize: 40,
