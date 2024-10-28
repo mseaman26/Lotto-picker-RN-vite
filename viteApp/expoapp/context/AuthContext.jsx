@@ -45,7 +45,7 @@ const AuthProvider = ({ children }) => {
         setUser(decoded.data);
         localStorage.setItem('authToken', data.data); // Store JWT in localStorage
       } else {
-        console.error('Login failed:', data.error || 'Unknown error');
+        console.log('Login failed:', data.errorMessage || 'Unknown error');
       }
     } catch (error) {
       console.error('Error during login:', error);
@@ -78,7 +78,7 @@ const AuthProvider = ({ children }) => {
         setUser( decoded.data );
         localStorage.setItem('authToken', data.data); // Store JWT in localStorage
       } else {
-        console.error('Signup failed:', data.error || 'Unknown error');
+        console.log('Signup failed:', data.errorMessage || 'Unknown error');
       }
     } catch (error) {
       console.error('Error during signup:', error);
